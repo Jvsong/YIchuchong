@@ -6,9 +6,9 @@ import { useRouter } from "next/navigation";
 import { BreedCard, NewsCard, ProductCard, ServiceCard } from "@/components/Cards";
 import { ecoCategories } from "@/data/site";
 import type { Breed, FunFact, NewsItem, PhotoAsset, Product, Service } from "@/data/types";
-import { getBreedList, getFunFacts, getNewsList, getPhotoAssets, getProducts, getServices } from "@/services/content";
+import { getAdminDashboardStats, getBreedList, getFunFacts, getNewsList, getPhotoAssets, getProducts, getServices } from "@/services/content";
 
-type Tab = "overview" | "news" | "wiki" | "facts" | "photos" | "products" | "services" | "home";
+type Tab = "overview" | "news" | "wiki" | "facts" | "photos" | "products" | "services" | "home" | "advice";
 
 const tabs: { id: Tab; label: string }[] = [
   { id: "overview", label: "数据概览" },
@@ -18,7 +18,8 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "photos", label: "图片素材库" },
   { id: "products", label: "产品内容管理" },
   { id: "services", label: "服务内容管理" },
-  { id: "home", label: "首页配置" }
+  { id: "home", label: "首页配置" },
+  { id: "advice", label: "养宠建议配置" }
 ];
 
 function useLocalCollection<T extends { id?: string; slug?: string }>(key: string, fallback: T[]) {
@@ -49,14 +50,27 @@ export default function AdminPage() {
   const [facts, setFacts] = useLocalCollection<FunFact>("yqc-facts", getFunFacts());
   const [productList, setProductList] = useLocalCollection<Product>("yqc-products", getProducts());
   const [serviceList, setServiceList] = useLocalCollection<Service>("yqc-services", getServices());
+  const [wikiSpecies, setWikiSpecies] = useState("all");
+  const [photoKeyword, setPhotoKeyword] = useState("");
+  const [photoCategory, setPhotoCategory] = useState("全部");
   const photos = getPhotoAssets() as PhotoAsset[];
 
-  const stats = useMemo(() => [
-    ["新闻数量", news.length],
-    ["百科数量", wiki.length],
-    ["图片数量", photos.length],
-    ["小科普数量", facts.length]
-  ], [facts.length, news.length, photos.length, wiki.length]);
+  const stats = useMemo(() => getAdminDashboardStats().map(([label, value]) => {
+    if (label === "资讯数量") return [label, news.length] as const;
+    if (label === "百科数量") return [label, wiki.length] as const;
+    if (label === "科普数量") return [label, facts.length] as const;
+    if (label === "产品数量") return [label, productList.length] as const;
+    if (label === "服务数量") return [label, serviceList.length] as const;
+    return [label, value] as const;
+  }), [facts.length, news.length, productList.length, serviceList.length, wiki.length]);
+  const visibleWiki = wiki.filter((item) => wikiSpecies === "all" || item.species === wikiSpecies);
+  const photoCategories = ["全部", ...Array.from(new Set(photos.map((item) => item.category)))];
+  const visiblePhotos = photos.filter((item) => {
+    const matchCategory = photoCategory === "全部" || item.category === photoCategory;
+    const pageUsageText = item.pageUsage?.map((usage) => typeof usage === "string" ? usage : `${usage.page} ${usage.role}`).join(" ");
+    const haystack = [item.id, item.fileName, item.category, item.scene, item.usage, item.author, pageUsageText].join(" ").toLowerCase();
+    return matchCategory && haystack.includes(photoKeyword.toLowerCase());
+  });
 
   function duplicateNews() {
     const id = `n${Date.now()}`;
@@ -103,7 +117,7 @@ export default function AdminPage() {
           <>
             <div className="section-head">
               <div><span className="eyebrow">Dashboard</span><h1 style={{ fontSize: "3.2rem" }}>数据概览</h1></div>
-              <p>第一版数据来自 mock 与 localStorage，结构保留后续 API 替换空间。</p>
+              <p>第四版数据来自模块化前端数据与 localStorage 演示存储，service 层保留后续 API 替换空间。</p>
             </div>
             <div className="grid cols-4">
               {stats.map(([label, value]) => (
@@ -112,6 +126,10 @@ export default function AdminPage() {
                   <h2 style={{ marginTop: 12 }}>{value}</h2>
                 </article>
               ))}
+              <article className="card feature-card">
+                <span className="tag">今日更新提示</span>
+                <p style={{ marginTop: 12 }}>第四版新增养宠建议接口，后续可把内容管理和建议记录接入 Spring Boot + MySQL。</p>
+              </article>
             </div>
           </>
         )}
@@ -125,7 +143,12 @@ export default function AdminPage() {
 
         {active === "wiki" && (
           <Manager title="宠物百科管理" onAdd={() => setWiki([{ ...wiki[0], slug: `breed-${Date.now()}`, name: "新建品种" }, ...wiki])}>
-            <div className="grid cols-4">{wiki.slice(0, 8).map((item) => <BreedCard key={item.slug} breed={item} />)}</div>
+            <div className="segmented">
+              {[["all", "全部"], ["dog", "狗狗"], ["cat", "猫咪"], ["small-pet", "小宠"]].map(([value, label]) => (
+                <button className={wikiSpecies === value ? "active" : ""} key={value} type="button" onClick={() => setWikiSpecies(value)}>{label}</button>
+              ))}
+            </div>
+            <div className="grid cols-4">{visibleWiki.slice(0, 8).map((item) => <BreedCard key={item.slug} breed={item} />)}</div>
             <EditableTable rows={wiki} getKey={(row) => row.slug} onUpdate={(slug, row) => setWiki(wiki.map((item) => item.slug === slug ? row : item))} onDelete={(slug) => setWiki(wiki.filter((item) => item.slug !== slug))} />
           </Manager>
         )}
@@ -138,7 +161,13 @@ export default function AdminPage() {
 
         {active === "photos" && (
           <Manager title="图片素材库">
-            <EditableTable rows={photos} getKey={(row) => row.id} />
+            <div className="filter-row">
+              <label className="search-field"><span>搜索素材</span><input value={photoKeyword} onChange={(event) => setPhotoKeyword(event.target.value)} placeholder="图片、作者、场景、页面用途" /></label>
+              <div className="chip-row">
+                {photoCategories.map((item) => <button className={photoCategory === item ? "active" : ""} key={item} type="button" onClick={() => setPhotoCategory(item)}>{item}</button>)}
+              </div>
+            </div>
+            <EditableTable rows={visiblePhotos} getKey={(row) => row.id} />
           </Manager>
         )}
 
@@ -164,6 +193,24 @@ export default function AdminPage() {
                   <span className="tag">生态卡片</span>
                   <h3>{item.title}</h3>
                   <p>{item.text}</p>
+                </article>
+              ))}
+            </div>
+          </Manager>
+        )}
+
+        {active === "advice" && (
+          <Manager title="养宠建议配置">
+            <div className="grid cols-3">
+              {[
+                ["服务端接口", "前台提交到 /api/pet-advice，由 Next.js 服务端读取 DEEPSEEK_API_KEY，不在前端暴露 Key。"],
+                ["本地兜底", "DeepSeek 未配置、超时或失败时，自动使用 aiRules.ts 生成结构化建议。"],
+                ["生产迁移", "后续 Spring Boot 可实现 PetAdviceController / PetAdviceService，并记录请求摘要和降级状态。"]
+              ].map(([title, text]) => (
+                <article className="card feature-card" key={title}>
+                  <span className="tag">说明</span>
+                  <h3 style={{ marginTop: 14 }}>{title}</h3>
+                  <p>{text}</p>
                 </article>
               ))}
             </div>

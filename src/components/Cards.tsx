@@ -27,12 +27,37 @@ export function EcoCard({ title, text, icon }: { title: string; text: string; ic
   );
 }
 
+export function EcoImageCard({ title, text, icon, href, image }: { title: string; text: string; icon: string; href: string; image: string }) {
+  const Icon = iconMap[icon] ?? Sparkles;
+  return (
+    <Link className="card product-card eco-image-card" href={href}>
+      <Image src={image} alt={title} width={720} height={520} />
+      <div className="card-body">
+        <div className="icon-badge" aria-hidden="true"><Icon size={22} /></div>
+        <h3>{title}</h3>
+        <p>{text}</p>
+        <span className="card-link">进入生态 <span aria-hidden="true">→</span></span>
+      </div>
+    </Link>
+  );
+}
+
+export function CollectionCard({ title, text, href, image }: { title: string; text: string; href: string; image: string }) {
+  return (
+    <Link className="collection-card" href={href}>
+      <Image src={image} alt={title} width={720} height={720} />
+      <span>{title}</span>
+      <p>{text}</p>
+    </Link>
+  );
+}
+
 export function ProductCard({ product }: { product: Product }) {
   return (
     <article className="card product-card">
       <Image src={product.image} alt={product.name} width={760} height={520} />
       <div className="card-body">
-        <span className="tag">{product.status}</span>
+        <span className="tag">{product.statusLabel}</span>
         <h3 style={{ marginTop: 12 }}>{product.name}</h3>
         <p>{product.summary}</p>
         <ul className="feature-list" aria-label={`${product.name}能力`}>
@@ -40,7 +65,7 @@ export function ProductCard({ product }: { product: Product }) {
             <li key={feature}>{feature}</li>
           ))}
         </ul>
-        <Link className="card-link" href={product.id === "tracker" ? "/locator" : "/devices"}>
+        <Link className="card-link" href={product.id === "tracker" ? "/locator" : `/devices/${product.slug}`}>
           查看详情 <span aria-hidden="true">→</span>
         </Link>
       </div>
@@ -56,7 +81,13 @@ export function NewsCard({ item }: { item: NewsItem }) {
         <span className="tag">{item.category}</span>
         <h3 style={{ marginTop: 12 }}>{item.title}</h3>
         <p>{item.summary}</p>
-        <p>{item.date} · {item.readTime}</p>
+        <div className="mini-tags">
+          {item.tags.slice(0, 3).map((tag) => <span key={tag}>{tag}</span>)}
+        </div>
+        <p>{item.publishDate} · {item.readTime}</p>
+        <Link className="card-link" href={`/news/${item.id}`}>
+          阅读详情 <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </article>
   );
@@ -70,6 +101,10 @@ export function BreedCard({ breed }: { breed: Breed }) {
         <span className="tag">{breed.species === "dog" ? "狗狗" : breed.species === "cat" ? "猫咪" : "小宠"}</span>
         <h3 style={{ marginTop: 12 }}>{breed.name}</h3>
         <p>{breed.summary}</p>
+        <div className="mini-tags">
+          <span>{breed.activityLevel}</span>
+          <span>{breed.careLevel}</span>
+        </div>
       </div>
     </Link>
   );
@@ -80,7 +115,8 @@ export function ServiceCard({ service }: { service: Service }) {
     <article className="card service-card">
       <Image src={service.image} alt={service.name} width={720} height={480} />
       <div className="card-body">
-        <h3>{service.name}</h3>
+        <span className="tag">{service.statusLabel}</span>
+        <h3 style={{ marginTop: 12 }}>{service.name}</h3>
         <p>{service.summary}</p>
         <ul className="feature-list">
           {service.points.map((point) => (

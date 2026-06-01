@@ -26,7 +26,12 @@ export default function BreedDetailPage({ params }: { params: { slug: string } }
           {[
             ["性格", breed.temperament],
             ["养护难度", breed.careLevel],
-            ["活动需求", breed.activity]
+            ["活动需求", breed.activityLevel],
+            ["适合人群", breed.suitablePeople],
+            ["每日运动", breed.dailyExercise],
+            ["设备建议", breed.deviceSuggestion],
+            ["喂养建议", breed.feedingTips],
+            ["健康风险", breed.healthRisks]
           ].map(([label, value]) => (
             <article className="card feature-card" key={label}>
               <span className="tag">{label}</span>

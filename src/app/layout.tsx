@@ -4,7 +4,11 @@ import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "易趣宠 Web 生态平台",
-  description: "以宠物定位器为核心的智能宠物生态平台"
+  description: "以宠物定位器为核心的智能宠物生态平台",
+  icons: {
+    icon: "/favicon.svg",
+    shortcut: "/favicon.svg"
+  }
 };
 
 export const viewport: Viewport = {

@@ -5,7 +5,7 @@ import { X } from "lucide-react";
 import { getFunFacts } from "@/services/content";
 
 export function FunFactTicker() {
-  const facts = useMemo(() => getFunFacts(), []);
+  const facts = useMemo(() => getFunFacts("home").slice(0, 12), []);
   const [index, setIndex] = useState(0);
   const [closed, setClosed] = useState(false);
 

@@ -1,0 +1,18 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 120" role="img" aria-labelledby="title desc">
+  <title id="title">易趣宠</title>
+  <desc id="desc">易趣宠品牌标识，包含宠物安全图形与中文品牌名</desc>
+  <defs>
+    <linearGradient id="markGradient" x1="12" x2="94" y1="10" y2="104" gradientUnits="userSpaceOnUse">
+      <stop stop-color="#9BC76A"/>
+      <stop offset="1" stop-color="#5E8F3F"/>
+    </linearGradient>
+  </defs>
+  <path fill="url(#markGradient)" d="M0 0h112v53.7C112 87.3 86.3 112 56 112S0 87.3 0 53.7V0Z"/>
+  <path fill="#111" d="M34.7 75.2c-8.2-4.8-8.5-14.3-.7-20.6 4-3.2 6.4-7.3 7.4-12.4 1.6-8 7.7-13.2 15.1-13.2s13.4 5.1 15 13.2c1 5.1 3.5 9.2 7.5 12.4 7.8 6.3 7.4 15.8-.8 20.6-6.2 3.6-12.4 3.2-16.9 1.1-3.3-1.5-6.5-1.5-9.8 0-4.5 2.1-10.7 2.5-16.8-1.1Z"/>
+  <path fill="#C9E98F" d="M28 31.3c6.6-10.9 20.6-15.8 35.4-13.1 11.2 2.1 18.5 8.8 20.9 15.4-11-2.9-20.5-.5-29.4 6.5-8.1 6.5-17.2 7.5-26.9-8.8Z"/>
+  <circle cx="44" cy="49" r="4.8" fill="#fff"/>
+  <circle cx="67" cy="49" r="4.8" fill="#fff"/>
+  <path fill="#92C163" d="M143 20h18v38c0 15 7.4 23.2 20.4 23.2s20.4-8.2 20.4-23.2V20h18v39.2c0 25-15 38-38.4 38S143 84.2 143 59.2V20Zm101.5 0h44.2c20.8 0 34.2 11.2 34.2 29.2 0 18.8-13.4 30-34.2 30h-26.2v17.2h-18V20Zm18 15.2v28.9h24.8c10.9 0 17.3-5.2 17.3-14.6 0-9-6.4-14.3-17.3-14.3h-24.8Z"/>
+  <path fill="#4B4B4B" d="M143 104h35v9h-35v-9Zm49 0h35v9h-35v-9Zm49 0h35v9h-35v-9Z"/>
+  <text x="142" y="92" fill="#4B4B4B" font-family="PingFang SC, Microsoft YaHei, sans-serif" font-size="26" font-weight="800" letter-spacing="7">易 趣 宠</text>
+</svg>

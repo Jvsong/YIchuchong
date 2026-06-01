@@ -1,21 +1,22 @@
-import { NewsCard } from "@/components/Cards";
+import { NewsExplorer } from "@/components/NewsExplorer";
 import { PageHero } from "@/components/PageHero";
-import { getNewsList } from "@/services/content";
+import { getNewsList, getPageHeroImages } from "@/services/content";
 
 export default function NewsPage() {
   const newsItems = getNewsList();
+  const heroImages = getPageHeroImages();
   return (
     <>
       <PageHero
         eyebrow="宠物资讯"
         title="今日宠物热点与智能养宠科普"
         description="覆盖新手养宠、走失预防、智能设备、寄养注意和服务安全。"
-        image="/assets/pets/lifestyle/pet-owner-phone-001.jpg"
+        image={heroImages.news}
         imageAlt="主人查看宠物资讯"
       />
       <section className="section compact">
-        <div className="container grid cols-3">
-          {newsItems.map((item) => <NewsCard key={item.id} item={item} />)}
+        <div className="container">
+          <NewsExplorer items={newsItems} />
         </div>
       </section>
     </>

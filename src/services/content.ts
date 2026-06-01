@@ -1,46 +1,11 @@
-import photoLibrary from "../../public/assets/pets/photo-library.json";
-import {
-  breeds,
-  funFacts,
-  homeConfig,
-  newsItems,
-  products,
-  services
-} from "@/data/site";
-import type { Breed, NewsItem, PhotoAsset } from "@/types";
-
-export function getNewsList() {
-  return newsItems;
-}
-
-export function getNewsById(id: string): NewsItem | undefined {
-  return newsItems.find((item) => item.id === id);
-}
-
-export function getBreedList() {
-  return breeds;
-}
-
-export function getBreedById(slug: string): Breed | undefined {
-  return breeds.find((item) => item.slug === slug);
-}
-
-export function getFunFacts() {
-  return funFacts;
-}
-
-export function getProducts() {
-  return products;
-}
-
-export function getServices() {
-  return services;
-}
-
-export function getPhotoAssets() {
-  return photoLibrary as PhotoAsset[];
-}
-
-export function getHomeConfig() {
-  return homeConfig;
-}
+export { generateAiCareAdvice, getAiCareRules } from "./aiCareService";
+export { getAdminDashboardStats } from "./adminService";
+export { getBreedById, getBreedList, getBreedTags } from "./breedService";
+export { getFunFacts } from "./funFactService";
+export { getFunModules, getGamificationConfig } from "./gamificationService";
+export { getCollectionCards, getEcoCategories, getHeroImages, getHomeConfig, getPageHeroImages, getSmartEcosystem } from "./homepageService";
+export { getNavigationItems } from "./navigationService";
+export { getNewsById, getNewsCategories, getNewsList, getNewsTags } from "./newsService";
+export { getPhotoAssets, getPhotosByPage } from "./photoService";
+export { getCoreProduct, getProductBySlug, getProducts } from "./productService";
+export { getServiceBySlug, getServices } from "./serviceService";
