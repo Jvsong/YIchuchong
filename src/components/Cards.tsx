@@ -22,6 +22,7 @@ export function EcoCard({ title, text, icon }: { title: string; text: string; ic
       </div>
       <h3>{title}</h3>
       <p>{text}</p>
+      <span className="card-link">进入生态 <span aria-hidden="true">→</span></span>
     </article>
   );
 }
@@ -39,6 +40,9 @@ export function ProductCard({ product }: { product: Product }) {
             <li key={feature}>{feature}</li>
           ))}
         </ul>
+        <Link className="card-link" href={product.id === "tracker" ? "/locator" : "/devices"}>
+          查看详情 <span aria-hidden="true">→</span>
+        </Link>
       </div>
     </article>
   );

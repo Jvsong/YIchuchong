@@ -1,7 +1,6 @@
-import type { Breed, FunFact, NewsItem, Product, Service } from "./types";
+import type { Breed, FunFact, HomeConfig, NewsItem, Product, Service } from "./types";
 
 export const navItems = [
-  { href: "/", label: "首页" },
   { href: "/locator", label: "宠物定位器" },
   { href: "/devices", label: "智能设备" },
   { href: "/ai-care", label: "AI养宠" },
@@ -12,10 +11,17 @@ export const navItems = [
   { href: "/about", label: "关于我们" }
 ];
 
+export const homeConfig: HomeConfig = {
+  heroTitle: "易趣宠，让宠物更安全，让养宠更智能",
+  heroSubtitle: "从宠物定位器出发，连接智能设备、AI养宠建议、宠物百科、寄养代溜与趣味互动，打造未来宠物生活生态。",
+  primaryAction: "了解定位器",
+  secondaryAction: "探索智能生态"
+};
+
 export const heroImages = [
-  "/assets/pets/lifestyle/pet-lifestyle-home-001.jpg",
-  "/assets/pets/dogs/dog-golden-outdoor-001.jpg",
-  "/assets/pets/cats/cat-indoor-feeding-001.jpg"
+  "/assets/pets/hero/hero-pet-owner-dog-001.jpg",
+  "/assets/pets/hero/hero-dog-safety-walk-001.jpg",
+  "/assets/pets/hero/hero-cat-smart-home-001.jpg"
 ];
 
 export const ecoCategories = [

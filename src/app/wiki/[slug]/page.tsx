@@ -1,13 +1,13 @@
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/PageHero";
-import { breeds } from "@/data/site";
+import { getBreedById, getBreedList } from "@/services/content";
 
 export function generateStaticParams() {
-  return breeds.map((breed) => ({ slug: breed.slug }));
+  return getBreedList().map((breed) => ({ slug: breed.slug }));
 }
 
 export default function BreedDetailPage({ params }: { params: { slug: string } }) {
-  const breed = breeds.find((item) => item.slug === params.slug);
+  const breed = getBreedById(params.slug);
   if (!breed) {
     notFound();
   }

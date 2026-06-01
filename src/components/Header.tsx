@@ -1,7 +1,7 @@
 "use client";
 
 import Link from "next/link";
-import { PawPrint } from "lucide-react";
+import { Search, PawPrint } from "lucide-react";
 import { navItems } from "@/data/site";
 
 export function Header() {
@@ -20,8 +20,8 @@ export function Header() {
               {item.label}
             </Link>
           ))}
-          <Link className="pill" href="/admin">
-            管理后台入口
+          <Link className="nav-icon-link" href="/news" aria-label="搜索宠物内容">
+            <Search size={18} aria-hidden="true" />
           </Link>
         </nav>
       </div>

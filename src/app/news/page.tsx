@@ -1,8 +1,9 @@
 import { NewsCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { newsItems } from "@/data/site";
+import { getNewsList } from "@/services/content";
 
 export default function NewsPage() {
+  const newsItems = getNewsList();
   return (
     <>
       <PageHero

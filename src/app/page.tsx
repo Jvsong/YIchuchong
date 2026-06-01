@@ -1,25 +1,47 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowRight, MapPin } from "lucide-react";
+import { Activity, ArrowRight, Battery, Bell, MapPin, Route, ShieldCheck, Users } from "lucide-react";
 import { AiCareDemo } from "@/components/AiCareDemo";
 import { BreedCard, EcoCard, NewsCard, ProductCard, ServiceCard } from "@/components/Cards";
-import { breeds, ecoCategories, funModules, heroImages, newsItems, products, services } from "@/data/site";
+import { ecoCategories, funModules, heroImages } from "@/data/site";
+import { getBreedList, getHomeConfig, getNewsList, getProducts, getServices } from "@/services/content";
 
 export default function HomePage() {
+  const home = getHomeConfig();
+  const products = getProducts();
+  const newsItems = getNewsList();
+  const breeds = getBreedList();
+  const services = getServices();
+  const tracker = products[0];
+  const trackerFeatures = [
+    { icon: MapPin, label: "实时定位", text: "外出、寄养和家庭共享场景都能快速确认位置。" },
+    { icon: Route, label: "历史轨迹", text: "按时间回看行动路线，帮助复盘走失风险点。" },
+    { icon: ShieldCheck, label: "电子围栏", text: "离开安全区域时第一时间提醒主人。" },
+    { icon: Battery, label: "低电量提醒", text: "把设备维护变成日常安全习惯。" },
+    { icon: Bell, label: "丢宠协寻", text: "预留照片、地点和联系方式的协寻入口。" },
+    { icon: Users, label: "家庭共享", text: "多人共同守护宠物，不靠单一主人记忆。" },
+    { icon: Activity, label: "活动报告", text: "用运动时长和趋势观察宠物状态。" }
+  ];
+
   return (
     <>
-      <section className="hero">
+      <section className="hero brand-hero">
         <div className="container hero-grid">
           <div className="hero-copy">
             <span className="eyebrow"><MapPin size={16} aria-hidden="true" /> 智能宠物生态第一站</span>
-            <h1>易趣宠，让宠物更安全，让养宠更智能</h1>
+            <h1>{home.heroTitle}</h1>
             <p className="lead">
-              从宠物定位器出发，连接智能设备、AI养宠建议、宠物百科、寄养代溜与趣味互动，打造未来宠物生活生态。
+              {home.heroSubtitle}
             </p>
             <div className="hero-actions">
-              <Link className="pill" href="/locator">了解定位器 <ArrowRight size={18} aria-hidden="true" /></Link>
-              <Link className="ghost-pill" href="/devices">探索智能生态</Link>
+              <Link className="pill" href="/locator">{home.primaryAction} <ArrowRight size={18} aria-hidden="true" /></Link>
+              <Link className="ghost-pill" href="/devices">{home.secondaryAction}</Link>
               <Link className="ghost-pill" href="/ai-care">体验AI养宠助手</Link>
+            </div>
+            <div className="hero-proof">
+              <span>定位器核心产品</span>
+              <span>6 类生态入口</span>
+              <span>30 条科普内容</span>
             </div>
           </div>
           <div className="hero-visual" aria-label="宠物与智能设备场景">
@@ -39,6 +61,12 @@ export default function HomePage() {
                   <span className="status-dot" aria-hidden="true" />
                 </div>
               </div>
+              <div className="phone-card">
+                <span className="tag">今日运动</span>
+                <strong>42 分钟</strong>
+                <p>安全围栏已开启，宠物状态良好。</p>
+                <div className="route-line" aria-hidden="true" />
+              </div>
             </div>
           </div>
         </div>
@@ -53,23 +81,47 @@ export default function HomePage() {
             </div>
             <p>第一版聚焦展示型官网与轻量内容管理，为后续设备接入、服务交易和真实定位能力保留结构。</p>
           </div>
-          <div className="grid cols-3">
+          <div className="grid cols-3 reveal-grid">
             {ecoCategories.map((item) => <EcoCard key={item.title} {...item} />)}
           </div>
         </div>
       </section>
 
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
+      <section className="section product-showcase-section">
+        <div className="container product-showcase">
+          <div className="section-head product-copy">
             <div>
               <span className="eyebrow">核心产品</span>
-              <h2>易趣宠宠物定位器</h2>
+              <h2>{tracker.name}</h2>
             </div>
             <p>围绕实时定位、历史轨迹、电子围栏、低电量提醒、丢宠协寻、家庭共享与活动报告构建安全感。</p>
           </div>
-          <div className="grid cols-3">
-            {products.slice(0, 3).map((product) => <ProductCard key={product.id} product={product} />)}
+          <div className="locator-stage">
+            <div className="locator-photo">
+              <Image src="/assets/pets/hero/hero-dog-safety-walk-001.jpg" alt="户外遛狗定位器安全场景" width={960} height={720} />
+            </div>
+            <div className="map-panel">
+              <span className="tag">安全围栏</span>
+              <h3>家附近 1.2 公里活动圈</h3>
+              <p>模拟轨迹、低电量提醒与家庭共享入口，为后续真实设备数据预留。</p>
+              <div className="map-path" aria-hidden="true">
+                <span />
+                <span />
+                <span />
+              </div>
+            </div>
+          </div>
+          <div className="grid cols-4 tracker-feature-grid">
+            {trackerFeatures.map((feature) => {
+              const Icon = feature.icon;
+              return (
+                <article className="card feature-card tracker-mini-card" key={feature.label}>
+                  <div className="icon-badge" aria-hidden="true"><Icon size={21} /></div>
+                  <h3>{feature.label}</h3>
+                  <p>{feature.text}</p>
+                </article>
+              );
+            })}
           </div>
         </div>
       </section>
@@ -83,7 +135,7 @@ export default function HomePage() {
             </div>
             <p>自动出粮机、宠物监控器、远程喂猫、智能饮水机与寄养监控设备会作为生态规划逐步接入。</p>
           </div>
-          <div className="grid cols-3">
+          <div className="grid cols-3 product-matrix">
             {products.slice(1).map((product) => <ProductCard key={product.id} product={product} />)}
           </div>
         </div>
@@ -98,7 +150,7 @@ export default function HomePage() {
             </div>
             <Link className="ghost-pill" href="/news">查看更多资讯</Link>
           </div>
-          <div className="grid cols-3">
+          <div className="grid cols-3 editorial-grid">
             {newsItems.slice(0, 6).map((item) => <NewsCard key={item.id} item={item} />)}
           </div>
         </div>

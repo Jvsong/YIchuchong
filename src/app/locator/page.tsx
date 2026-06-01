@@ -1,9 +1,9 @@
 import { ProductCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { products } from "@/data/site";
+import { getProducts } from "@/services/content";
 
 export default function LocatorPage() {
-  const tracker = products[0];
+  const tracker = getProducts()[0];
   return (
     <>
       <PageHero

@@ -16,12 +16,14 @@ export function PageHero({
   return (
     <section className="page-hero">
       <div className="container page-hero-inner">
-        <div>
+        <div className="page-hero-copy">
           <span className="eyebrow">{eyebrow}</span>
-          <h1 style={{ fontSize: "clamp(2.5rem, 6vw, 5.4rem)", marginTop: 18 }}>{title}</h1>
+          <h1>{title}</h1>
           <p className="lead">{description}</p>
         </div>
-        <Image src={image} alt={imageAlt} width={900} height={620} priority />
+        <div className="page-hero-media">
+          <Image src={image} alt={imageAlt} width={900} height={620} priority />
+        </div>
       </div>
     </section>
   );

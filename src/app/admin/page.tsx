@@ -1,10 +1,12 @@
 "use client";
 
 import { useMemo, useState } from "react";
+import Image from "next/image";
+import { useRouter } from "next/navigation";
 import { BreedCard, NewsCard, ProductCard, ServiceCard } from "@/components/Cards";
-import { breeds, ecoCategories, funFacts, newsItems, products, services } from "@/data/site";
+import { ecoCategories } from "@/data/site";
 import type { Breed, FunFact, NewsItem, PhotoAsset, Product, Service } from "@/data/types";
-import photoLibrary from "../../../public/assets/pets/photo-library.json";
+import { getBreedList, getFunFacts, getNewsList, getPhotoAssets, getProducts, getServices } from "@/services/content";
 
 type Tab = "overview" | "news" | "wiki" | "facts" | "photos" | "products" | "services" | "home";
 
@@ -23,7 +25,12 @@ function useLocalCollection<T extends { id?: string; slug?: string }>(key: strin
   const [items, setItems] = useState<T[]>(() => {
     if (typeof window === "undefined") return fallback;
     const cached = window.localStorage.getItem(key);
-    return cached ? (JSON.parse(cached) as T[]) : fallback;
+    try {
+      return cached ? (JSON.parse(cached) as T[]) : fallback;
+    } catch {
+      window.localStorage.removeItem(key);
+      return fallback;
+    }
   });
 
   function persist(next: T[]) {
@@ -35,13 +42,14 @@ function useLocalCollection<T extends { id?: string; slug?: string }>(key: strin
 }
 
 export default function AdminPage() {
+  const router = useRouter();
   const [active, setActive] = useState<Tab>("overview");
-  const [news, setNews] = useLocalCollection<NewsItem>("yqc-news", newsItems);
-  const [wiki, setWiki] = useLocalCollection<Breed>("yqc-breeds", breeds);
-  const [facts, setFacts] = useLocalCollection<FunFact>("yqc-facts", funFacts);
-  const [productList, setProductList] = useLocalCollection<Product>("yqc-products", products);
-  const [serviceList, setServiceList] = useLocalCollection<Service>("yqc-services", services);
-  const photos = photoLibrary as PhotoAsset[];
+  const [news, setNews] = useLocalCollection<NewsItem>("yqc-news", getNewsList());
+  const [wiki, setWiki] = useLocalCollection<Breed>("yqc-breeds", getBreedList());
+  const [facts, setFacts] = useLocalCollection<FunFact>("yqc-facts", getFunFacts());
+  const [productList, setProductList] = useLocalCollection<Product>("yqc-products", getProducts());
+  const [serviceList, setServiceList] = useLocalCollection<Service>("yqc-services", getServices());
+  const photos = getPhotoAssets() as PhotoAsset[];
 
   const stats = useMemo(() => [
     ["新闻数量", news.length],
@@ -60,11 +68,21 @@ export default function AdminPage() {
     setFacts([{ ...facts[0], id, body: "新建小科普内容。" }, ...facts]);
   }
 
+  async function logout() {
+    await fetch("/api/admin/logout", { method: "POST" });
+    window.localStorage.removeItem("yqc-admin-demo");
+    router.replace("/admin/login");
+    router.refresh();
+  }
+
   return (
     <div className="admin-shell">
       <aside className="admin-side">
         <span className="eyebrow">轻量管理平台</span>
         <h2 style={{ fontSize: "2rem", marginTop: 16 }}>易趣宠后台</h2>
+        <button className="ghost-pill admin-logout" type="button" onClick={logout}>
+          退出登录
+        </button>
         <div className="admin-tabs" role="tablist" aria-label="后台模块">
           {tabs.map((tab) => (
             <button
@@ -211,6 +229,14 @@ function EditableTable<T extends Record<string, unknown>>({
                           : event.target.value;
                         onUpdate(getKey(row), { ...row, [key]: nextValue });
                       }}
+                    />
+                  ) : key === "path" && typeof row[key] === "string" ? (
+                    <Image
+                      className="admin-thumb"
+                      src={String(row[key])}
+                      alt={String(row.id ?? "宠物素材")}
+                      width={92}
+                      height={68}
                     />
                   ) : (
                     Array.isArray(row[key]) ? (row[key] as unknown[]).join("、") : String(row[key] ?? "")

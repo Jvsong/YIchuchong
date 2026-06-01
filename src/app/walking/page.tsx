@@ -1,8 +1,9 @@
 import { ServiceCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { services } from "@/data/site";
+import { getServices } from "@/services/content";
 
 export default function WalkingPage() {
+  const services = getServices();
   return (
     <>
       <PageHero

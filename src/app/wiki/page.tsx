@@ -1,8 +1,9 @@
-import { BreedCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { breeds } from "@/data/site";
+import { WikiExplorer } from "@/components/WikiExplorer";
+import { getBreedList } from "@/services/content";
 
 export default function WikiPage() {
+  const breeds = getBreedList();
   return (
     <>
       <PageHero
@@ -13,8 +14,8 @@ export default function WikiPage() {
         imageAlt="猫咪百科图片"
       />
       <section className="section compact">
-        <div className="container grid cols-4">
-          {breeds.map((breed) => <BreedCard key={breed.slug} breed={breed} />)}
+        <div className="container">
+          <WikiExplorer breeds={breeds} />
         </div>
       </section>
     </>

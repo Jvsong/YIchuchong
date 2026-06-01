@@ -1,8 +1,6 @@
 import type { Metadata, Viewport } from "next";
 import "./globals.css";
-import { Footer } from "@/components/Footer";
-import { FunFactPopup } from "@/components/FunFactPopup";
-import { Header } from "@/components/Header";
+import { SiteChrome } from "@/components/SiteChrome";
 
 export const metadata: Metadata = {
   title: "易趣宠 Web 生态平台",
@@ -20,12 +18,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a className="skip-link" href="#main">
           跳到主要内容
         </a>
-        <div className="site-shell">
-          <Header />
-          <main id="main">{children}</main>
-          <Footer />
-          <FunFactPopup />
-        </div>
+        <SiteChrome>{children}</SiteChrome>
       </body>
     </html>
   );

@@ -1,4 +1,4 @@
-import { copyFile, mkdir, stat, writeFile } from "node:fs/promises";
+import { mkdir, stat, writeFile } from "node:fs/promises";
 import { execFile } from "node:child_process";
 import { dirname, join } from "node:path";
 import { fileURLToPath } from "node:url";
@@ -17,6 +17,12 @@ const shared = {
 const run = promisify(execFile);
 
 const rows = [
+  ["hero-pet-owner-dog-001.jpg", "hero", "dog", "Mixed Breed", "bright owner and pet lifestyle", "首页 Banner / 品牌首屏", 1643457],
+  ["hero-dog-safety-walk-001.jpg", "hero", "dog", "Golden Retriever", "outdoor safety walk", "定位器页面 / 首页首屏", 1108099],
+  ["hero-cat-smart-home-001.jpg", "hero", "cat", "Domestic Cat", "indoor smart feeding", "智能设备页面 / 内容卡片", 45201],
+  ["hero-family-pet-001.jpg", "hero", "dog", "Family Pet", "family pet lifestyle", "关于我们 / 品牌故事", 4587998],
+  ["hero-service-walking-001.jpg", "hero", "dog", "Mixed Breed", "city walking service", "宠物服务 / 代溜场景", 1254140],
+
   ["dog-golden-outdoor-001.jpg", "dogs", "dog", "Golden Retriever", "outdoor safety walk", "homepage hero, locator detail", 1108099],
   ["dog-corgi-park-001.jpg", "dogs", "dog", "Corgi", "park walk", "breed wiki", 58997],
   ["dog-shiba-city-001.jpg", "dogs", "dog", "Shiba Inu", "city walk", "breed wiki", 1805164],
@@ -105,23 +111,12 @@ for (const [fileName, category, species, breed, scene, usage, photoId] of rows) 
   const imageUrl = urlFor(photoId);
   const destination = join(dir, fileName);
   if (!(await existsWithBytes(destination))) {
-    try {
-      await download(imageUrl, destination);
-    } catch (error) {
-      const localFallback = join(baseDir, category, rows.find((row) => row[1] === category)?.[0] ?? "dogs/dog-golden-outdoor-001.jpg");
-      const globalFallback = join(baseDir, "dogs/dog-golden-outdoor-001.jpg");
-      if (await existsWithBytes(localFallback)) {
-        await copyFile(localFallback, destination);
-      } else if (await existsWithBytes(globalFallback)) {
-        await copyFile(globalFallback, destination);
-      } else {
-        throw error;
-      }
-    }
+    await download(imageUrl, destination);
   }
   library.push({
     id: fileName.replace(".jpg", ""),
-    fileName: `${category}/${fileName}`,
+    fileName,
+    path: `/assets/pets/${category}/${fileName}`,
     category,
     species,
     breed,

@@ -1,8 +1,9 @@
 import { ProductCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { products } from "@/data/site";
+import { getProducts } from "@/services/content";
 
 export default function DevicesPage() {
+  const products = getProducts();
   return (
     <>
       <PageHero
