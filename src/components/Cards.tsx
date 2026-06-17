@@ -48,6 +48,7 @@ export function CollectionCard({ title, text, href, image }: { title: string; te
       <Image src={image} alt={title} width={720} height={720} />
       <span>{title}</span>
       <p>{text}</p>
+      <strong>探索系列</strong>
     </Link>
   );
 }

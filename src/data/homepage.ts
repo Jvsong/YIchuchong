@@ -37,14 +37,12 @@ export const ecoCategories = [
 ];
 
 export const collectionCards = [
-  { title: "宠物定位器", text: "实时确认外出位置，把安全提醒前置到日常。", href: "/locator", image: "/assets/pets/device-scenes/device-tracker-collar-001.jpg" },
-  { title: "电子围栏", text: "离开安全区域时提醒主人，减少走失黄金时间。", href: "/locator", image: "/assets/pets/hero/hero-dog-safety-walk-001.jpg" },
-  { title: "历史轨迹", text: "回看路线、活动范围和高频风险点。", href: "/locator", image: "/assets/pets/dogs/dog-walking-city-001.jpg" },
-  { title: "低电量提醒", text: "把设备维护变成可感知的安全习惯。", href: "/locator", image: "/assets/pets/device-scenes/device-wearable-walk-001.jpg" },
-  { title: "智能喂食", text: "定时计划、余粮提醒和多宠食量记录规划。", href: "/devices", image: "/assets/pets/device-scenes/device-feeder-home-001.jpg" },
-  { title: "智能饮水", text: "关注饮水趋势、水量和滤芯维护。", href: "/devices", image: "/assets/pets/device-scenes/device-fountain-001.jpg" },
-  { title: "宠物监控", text: "离家、寄养和幼宠看护场景的远程观察。", href: "/devices", image: "/assets/pets/device-scenes/device-camera-home-001.jpg" },
-  { title: "养宠建议", text: "结合品种、天气、场景和可用时间生成计划。", href: "/ai-care", image: "/assets/pets/lifestyle/pet-owner-phone-001.jpg" }
+  { title: "定位安全", text: "定位器、围栏、轨迹与低电量提醒。", href: "/locator", image: "/assets/pets/device-scenes/device-tracker-collar-001.jpg" },
+  { title: "智能喂养", text: "定时计划、余粮提醒与喂养记录规划。", href: "/devices", image: "/assets/pets/device-scenes/device-feeder-home-001.jpg" },
+  { title: "智能饮水", text: "饮水趋势、水量提醒与滤芯维护。", href: "/devices", image: "/assets/pets/device-scenes/device-fountain-001.jpg" },
+  { title: "远程看护", text: "宠物监控、寄养看护与家庭共享。", href: "/devices", image: "/assets/pets/device-scenes/device-camera-home-001.jpg" },
+  { title: "养宠内容", text: "百科、资讯和日常照护知识。", href: "/wiki", image: "/assets/pets/lifestyle/pet-couch-calm-001.jpg" },
+  { title: "生态服务", text: "寄养、代溜、合作与安全档案。", href: "/boarding", image: "/assets/pets/service-scenes/service-owner-handoff-001.jpg" }
 ];
 
 export const smartEcosystem = [

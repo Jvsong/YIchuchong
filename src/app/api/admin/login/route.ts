@@ -13,8 +13,13 @@ export async function POST(request: Request) {
   }
 
   const response = NextResponse.json({ ok: true });
+  const isSecure =
+    new URL(request.url).protocol === "https:" ||
+    request.headers.get("x-forwarded-proto") === "https";
+
   response.cookies.set(ADMIN_SESSION_COOKIE, ADMIN_SESSION_VALUE, {
     httpOnly: true,
+    secure: isSecure,
     sameSite: "lax",
     path: "/",
     maxAge: 60 * 60 * 6

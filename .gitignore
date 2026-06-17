@@ -7,3 +7,5 @@ dist
 .env
 .env.local
 .env.*.local
+.claude/deploy_key
+.claude/deploy_key.pub

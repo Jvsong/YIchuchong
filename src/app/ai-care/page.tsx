@@ -17,11 +17,11 @@ export default function AiCarePage() {
         <div className="container">
           <AiCareDemo />
           <div className="grid cols-3" style={{ marginTop: 22 }}>
-            {["规则兜底来自 aiRules.ts", "DeepSeek 不可用时自动降级", "建议不能替代兽医诊断"].map((item) => (
+            {["科学日常计划", "设备联动建议", "不能替代兽医诊断"].map((item) => (
               <article className="card feature-card" key={item}>
                 <span className="tag">养宠建议</span>
                 <h3 style={{ marginTop: 14 }}>{item}</h3>
-                <p>第四版通过 Next.js 服务端接口接入 DeepSeek，并保留本地规则兜底，后续可迁移到 Spring Boot。</p>
+                <p>根据宠物档案、天气、场景和主人时间生成结构化建议；当宠物持续异常时，应及时咨询专业兽医。</p>
               </article>
             ))}
           </div>

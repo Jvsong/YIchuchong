@@ -1,20 +1,15 @@
 import Image from "next/image";
 import Link from "next/link";
 import { Activity, ArrowRight, Battery, Bell, MapPin, Route, ShieldCheck, Users } from "lucide-react";
-import { AiCareDemo } from "@/components/AiCareDemo";
-import { BreedCard, CollectionCard, EcoImageCard, NewsCard, ProductCard, ServiceCard } from "@/components/Cards";
-import { getBreedList, getCollectionCards, getEcoCategories, getFunModules, getHeroImages, getHomeConfig, getNewsList, getProducts, getServices, getSmartEcosystem } from "@/services/content";
+import { CollectionCard, NewsCard } from "@/components/Cards";
+import { getCollectionCards, getHeroImages, getHomeConfig, getNewsList, getProducts, getSmartEcosystem } from "@/services/content";
 
 export default function HomePage() {
   const home = getHomeConfig();
   const products = getProducts();
   const newsItems = getNewsList();
-  const breeds = getBreedList();
-  const services = getServices();
   const heroImages = getHeroImages();
-  const ecoCategories = getEcoCategories();
   const collectionCards = getCollectionCards();
-  const funModules = getFunModules();
   const smartEcosystem = getSmartEcosystem();
   const tracker = products[0];
   const trackerFeatures = [
@@ -26,6 +21,7 @@ export default function HomePage() {
     { icon: Users, label: "家庭共享", text: "多人共同守护宠物，不靠单一主人记忆。" },
     { icon: Activity, label: "活动报告", text: "用运动时长和趋势观察宠物状态。" }
   ];
+  const trackerSpecs = ["实时位置", "电子围栏", "历史轨迹", "家庭共享", "低电量提醒", "App 记录"];
 
   return (
     <>
@@ -128,21 +124,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section compact">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">生态分类</span>
-              <h2>从安全入口，延展到完整养宠生活</h2>
-            </div>
-            <p>前台保持品牌官网表达，数据仍通过 service 层读取，方便后续替换为 Spring Boot + MySQL。</p>
-          </div>
-          <div className="grid cols-3 reveal-grid">
-            {ecoCategories.map((item) => <EcoImageCard key={item.title} {...item} />)}
-          </div>
-        </div>
-      </section>
-
       <section className="section smart-home-section">
         <Image className="section-bg-image" src="/assets/pets/hero/hero-cat-smart-home-001.jpg" alt="" fill sizes="100vw" />
         <div className="container smart-home-panel">
@@ -174,6 +155,10 @@ export default function HomePage() {
             </div>
             <p>围绕实时定位、历史轨迹、电子围栏、低电量提醒、丢宠协寻、家庭共享与活动报告构建安全感。</p>
           </div>
+          <div className="spec-strip" aria-label="定位器核心能力">
+            {trackerSpecs.map((item) => <span key={item}>{item}</span>)}
+            <Link href="/locator">查看完整规格</Link>
+          </div>
           <div className="locator-stage">
             <div className="locator-photo">
               <Image src="/assets/pets/hero/hero-dog-safety-walk-001.jpg" alt="户外遛狗定位器安全场景" width={960} height={720} />
@@ -204,21 +189,6 @@ export default function HomePage() {
         </div>
       </section>
 
-      <section className="section compact">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">生态规划 / 即将接入 / 未来能力</span>
-              <h2>未来智能设备展示</h2>
-            </div>
-            <p>自动出粮机、宠物监控器、远程喂猫、智能饮水机与寄养监控设备会作为生态规划逐步接入。</p>
-          </div>
-          <div className="grid cols-3 product-matrix">
-            {products.slice(1).map((product) => <ProductCard key={product.id} product={product} />)}
-          </div>
-        </div>
-      </section>
-
       <section className="section">
         <div className="container">
           <div className="section-head">
@@ -229,71 +199,7 @@ export default function HomePage() {
             <Link className="ghost-pill" href="/news">查看更多资讯</Link>
           </div>
           <div className="grid cols-3 editorial-grid">
-            {newsItems.slice(0, 6).map((item) => <NewsCard key={item.id} item={item} />)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section compact">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">养宠建议</span>
-              <h2>用日常数据生成结构化建议</h2>
-            </div>
-            <p>根据宠物类型、品种、年龄、体型、健康状态、天气和主人可用时间生成运动、喂养、设备和任务建议。</p>
-          </div>
-          <AiCareDemo />
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">趣味互动</span>
-              <h2>把安全习惯变成每日陪伴</h2>
-            </div>
-            <Link className="ghost-pill" href="/fun">进入互动中心</Link>
-          </div>
-          <div className="grid cols-4">
-            {funModules.map((item) => (
-              <article className="card feature-card" key={item.title}>
-                <span className="tag">{item.value}</span>
-                <h3 style={{ marginTop: 14 }}>{item.title}</h3>
-                <p>{item.text}</p>
-              </article>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      <section className="section compact">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">宠物服务入口</span>
-              <h2>寄养监控、宠物代溜与门店合作</h2>
-            </div>
-            <Link className="ghost-pill" href="/partners">合作入驻</Link>
-          </div>
-          <div className="grid cols-4">
-            {services.map((service) => <ServiceCard key={service.id} service={service} />)}
-          </div>
-        </div>
-      </section>
-
-      <section className="section">
-        <div className="container">
-          <div className="section-head">
-            <div>
-              <span className="eyebrow">热门百科</span>
-              <h2>认识不同宠物的生活需求</h2>
-            </div>
-            <Link className="ghost-pill" href="/wiki">打开宠物百科</Link>
-          </div>
-          <div className="grid cols-4">
-            {breeds.slice(0, 8).map((breed) => <BreedCard key={breed.slug} breed={breed} />)}
+            {newsItems.slice(0, 3).map((item) => <NewsCard key={item.id} item={item} />)}
           </div>
         </div>
       </section>

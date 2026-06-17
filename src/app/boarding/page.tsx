@@ -17,8 +17,24 @@ export default function BoardingPage() {
       />
       <section className="section compact">
         <div className="container product-showcase">
+          <div className="service-pricing">
+            {[
+              ["日间寄养", "适合白天照护", "环境展示 / 饮水喂食 / 图文反馈"],
+              ["过夜寄养", "适合短途出行", "独立休息区 / 晚间巡检 / 次日报告"],
+              ["透明看护", "适合敏感宠物", "监控规划 / 服务留痕 / 异常提醒"]
+            ].map(([title, sub, detail]) => (
+              <article className="card feature-card" key={title}>
+                <span className="tag">{sub}</span>
+                <h3 style={{ marginTop: 14 }}>{title}</h3>
+                <p>{detail}</p>
+              </article>
+            ))}
+          </div>
           <div className="grid cols-3">
             {services.map((service) => <ServiceCard key={service.id} service={service} />)}
+          </div>
+          <div className="service-checklist">
+            {["疫苗记录", "过敏禁忌", "饮食作息", "紧急联系人", "牵引规范", "日报授权"].map((item) => <span key={item}>{item}</span>)}
           </div>
           <div className="grid cols-3">
             {services.slice(0, 3).map((service) => (
