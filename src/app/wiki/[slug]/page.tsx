@@ -1,10 +1,8 @@
 import { notFound } from "next/navigation";
 import { PageHero } from "@/components/PageHero";
-import { getBreedById, getBreedList } from "@/services/content";
+import { getBreedById } from "@/lib/serverData";
 
-export function generateStaticParams() {
-  return getBreedList().map((breed) => ({ slug: breed.slug }));
-}
+export const dynamic = 'force-dynamic';
 
 export default function BreedDetailPage({ params }: { params: { slug: string } }) {
   const breed = getBreedById(params.slug);

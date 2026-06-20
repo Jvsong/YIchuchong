@@ -19,20 +19,25 @@ export function AdminLoginForm() {
     const password = String(formData.get("password") ?? "");
 
     startTransition(async () => {
-      const response = await fetch("/api/admin/login", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ username, password })
-      });
+      try {
+        const response = await fetch("/api/admin/login", {
+          method: "POST",
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({ username, password })
+        });
 
-      if (!response.ok) {
-        setError("账号或密码错误");
-        return;
+        if (!response.ok) {
+          setError("账号或密码错误");
+          return;
+        }
+
+        const from = searchParams.get("from") ?? "";
+        const target = from.startsWith("/") && !from.startsWith("//") ? from : "/admin";
+        router.replace(target);
+        router.refresh();
+      } catch {
+        setError("网络错误，请检查连接后重试");
       }
-
-      window.localStorage.setItem("yqc-admin-demo", "signed-in");
-      router.replace(searchParams.get("from") ?? "/admin");
-      router.refresh();
     });
   }
 

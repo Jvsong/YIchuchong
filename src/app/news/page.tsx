@@ -1,6 +1,9 @@
 import { NewsExplorer } from "@/components/NewsExplorer";
 import { PageHero } from "@/components/PageHero";
-import { getNewsList, getPageHeroImages } from "@/services/content";
+import { getPageHeroImages } from "@/services/content";
+import { getNewsList } from "@/lib/serverData";
+
+export const dynamic = 'force-dynamic';
 
 export default function NewsPage() {
   const newsItems = getNewsList();

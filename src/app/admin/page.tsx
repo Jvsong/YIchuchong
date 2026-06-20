@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { BreedCard, NewsCard, ProductCard, ServiceCard } from "@/components/Cards";
@@ -22,34 +22,42 @@ const tabs: { id: Tab; label: string }[] = [
   { id: "advice", label: "养宠建议配置" }
 ];
 
-function useLocalCollection<T extends { id?: string; slug?: string }>(key: string, fallback: T[]) {
-  const [items, setItems] = useState<T[]>(() => {
-    if (typeof window === "undefined") return fallback;
-    const cached = window.localStorage.getItem(key);
-    try {
-      return cached ? (JSON.parse(cached) as T[]) : fallback;
-    } catch {
-      window.localStorage.removeItem(key);
-      return fallback;
-    }
-  });
+function useApiCollection<T extends { id?: string; slug?: string }>(type: string, fallback: T[]) {
+  const [items, setItems] = useState<T[]>(fallback);
+  const [loading, setLoading] = useState(true);
 
-  function persist(next: T[]) {
+  useEffect(() => {
+    fetch(`/api/admin/data/${type}`)
+      .then((r) => {
+        if (!r.ok) throw new Error('load failed');
+        return r.json() as Promise<T[]>;
+      })
+      .then(setItems)
+      .catch(() => {})
+      .finally(() => setLoading(false));
+  }, [type]);
+
+  async function persist(next: T[]) {
     setItems(next);
-    window.localStorage.setItem(key, JSON.stringify(next));
+    await fetch(`/api/admin/data/${type}`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(next),
+    }).catch(() => {});
   }
 
-  return [items, persist] as const;
+  return [items, persist, loading] as const;
 }
 
 export default function AdminPage() {
   const router = useRouter();
   const [active, setActive] = useState<Tab>("overview");
-  const [news, setNews] = useLocalCollection<NewsItem>("yqc-news", getNewsList());
-  const [wiki, setWiki] = useLocalCollection<Breed>("yqc-breeds", getBreedList());
-  const [facts, setFacts] = useLocalCollection<FunFact>("yqc-facts", getFunFacts());
-  const [productList, setProductList] = useLocalCollection<Product>("yqc-products", getProducts());
-  const [serviceList, setServiceList] = useLocalCollection<Service>("yqc-services", getServices());
+  const [news, setNews, newsLoading] = useApiCollection<NewsItem>("news", getNewsList());
+  const [wiki, setWiki, wikiLoading] = useApiCollection<Breed>("breeds", getBreedList());
+  const [facts, setFacts, factsLoading] = useApiCollection<FunFact>("facts", getFunFacts());
+  const [productList, setProductList, productsLoading] = useApiCollection<Product>("products", getProducts());
+  const [serviceList, setServiceList, servicesLoading] = useApiCollection<Service>("services", getServices());
+  const isLoading = newsLoading || wikiLoading || factsLoading || productsLoading || servicesLoading;
   const [wikiSpecies, setWikiSpecies] = useState("all");
   const [photoKeyword, setPhotoKeyword] = useState("");
   const [photoCategory, setPhotoCategory] = useState("全部");
@@ -83,8 +91,9 @@ export default function AdminPage() {
   }
 
   async function logout() {
-    await fetch("/api/admin/logout", { method: "POST" });
-    window.localStorage.removeItem("yqc-admin-demo");
+    try {
+      await fetch("/api/admin/logout", { method: "POST" });
+    } catch {}
     router.replace("/admin/login");
     router.refresh();
   }
@@ -113,11 +122,16 @@ export default function AdminPage() {
         </div>
       </aside>
       <section className="admin-main">
+        {isLoading && (
+          <div style={{ padding: "12px 24px", background: "var(--surface)", borderRadius: 8, marginBottom: 16, fontSize: "0.9rem", color: "var(--text-secondary)" }}>
+            正在从服务器加载数据…
+          </div>
+        )}
         {active === "overview" && (
           <>
             <div className="section-head">
               <div><span className="eyebrow">Dashboard</span><h1 style={{ fontSize: "3.2rem" }}>数据概览</h1></div>
-              <p>第四版数据来自模块化前端数据与 localStorage 演示存储，service 层保留后续 API 替换空间。</p>
+              <p>内容数据存储于服务器 JSON 文件，支持跨浏览器持久化。Service 层预留后续 Spring Boot + MySQL 替换空间。</p>
             </div>
             <div className="grid cols-4">
               {stats.map(([label, value]) => (

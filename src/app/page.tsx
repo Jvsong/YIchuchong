@@ -2,16 +2,16 @@ import Image from "next/image";
 import Link from "next/link";
 import { Activity, ArrowRight, Battery, Bell, MapPin, Route, ShieldCheck, Users } from "lucide-react";
 import { CollectionCard, NewsCard } from "@/components/Cards";
-import { getCollectionCards, getHeroImages, getHomeConfig, getNewsList, getProducts, getSmartEcosystem } from "@/services/content";
+import { getCollectionCards, getCoreProduct, getHeroImages, getHomeConfig, getNewsList, getSmartEcosystem } from "@/services/content";
 
 export default function HomePage() {
   const home = getHomeConfig();
-  const products = getProducts();
+  const tracker = getCoreProduct();
   const newsItems = getNewsList();
   const heroImages = getHeroImages();
   const collectionCards = getCollectionCards();
   const smartEcosystem = getSmartEcosystem();
-  const tracker = products[0];
+  if (!tracker) return null;
   const trackerFeatures = [
     { icon: MapPin, label: "实时定位", text: "外出、寄养和家庭共享场景都能快速确认位置。" },
     { icon: Route, label: "历史轨迹", text: "按时间回看行动路线，帮助复盘走失风险点。" },

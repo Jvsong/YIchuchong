@@ -6,7 +6,12 @@ import {
 } from "@/lib/admin-auth";
 
 export async function POST(request: Request) {
-  const body = (await request.json()) as { username?: string; password?: string };
+  let body: { username?: string; password?: string };
+  try {
+    body = (await request.json()) as { username?: string; password?: string };
+  } catch {
+    return NextResponse.json({ message: '请求格式错误' }, { status: 400 });
+  }
 
   if (!verifyAdminCredentials(body.username ?? "", body.password ?? "")) {
     return NextResponse.json({ message: "账号或密码错误" }, { status: 401 });

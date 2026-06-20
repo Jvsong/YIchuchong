@@ -1,11 +1,11 @@
 export { generateAiCareAdvice, getAiCareRules } from "./aiCareService";
 export { getAdminDashboardStats } from "./adminService";
-export { getBreedById, getBreedList, getBreedTags } from "./breedService";
+export { getBreedById, getBreedList } from "./breedService";
 export { getFunFacts } from "./funFactService";
-export { getFunModules, getGamificationConfig } from "./gamificationService";
-export { getCollectionCards, getEcoCategories, getHeroImages, getHomeConfig, getPageHeroImages, getSmartEcosystem } from "./homepageService";
+export { getGamificationConfig } from "./gamificationService";
+export { getCollectionCards, getHeroImages, getHomeConfig, getPageHeroImages, getSmartEcosystem } from "./homepageService";
 export { getNavigationItems } from "./navigationService";
-export { getNewsById, getNewsCategories, getNewsList, getNewsTags } from "./newsService";
-export { getPhotoAssets, getPhotosByPage } from "./photoService";
+export { getNewsById, getNewsList } from "./newsService";
+export { getPhotoAssets } from "./photoService";
 export { getCoreProduct, getProductBySlug, getProducts } from "./productService";
-export { getServiceBySlug, getServices } from "./serviceService";
+export { getServices } from "./serviceService";

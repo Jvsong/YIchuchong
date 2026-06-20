@@ -1,6 +1,9 @@
 import { PageHero } from "@/components/PageHero";
 import { WikiExplorer } from "@/components/WikiExplorer";
-import { getBreedList, getPageHeroImages } from "@/services/content";
+import { getPageHeroImages } from "@/services/content";
+import { getBreedList } from "@/lib/serverData";
+
+export const dynamic = 'force-dynamic';
 
 export default function WikiPage() {
   const breeds = getBreedList();

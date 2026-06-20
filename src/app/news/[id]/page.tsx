@@ -2,11 +2,9 @@ import { notFound } from "next/navigation";
 import Link from "next/link";
 import { NewsCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
-import { getNewsById, getNewsList } from "@/services/content";
+import { getNewsById, getNewsList } from "@/lib/serverData";
 
-export function generateStaticParams() {
-  return getNewsList().map((item) => ({ id: item.id }));
-}
+export const dynamic = 'force-dynamic';
 
 export default function NewsDetailPage({ params }: { params: { id: string } }) {
   const item = getNewsById(params.id);
