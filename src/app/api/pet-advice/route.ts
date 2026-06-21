@@ -1,6 +1,6 @@
 import { NextResponse } from "next/server";
 import { generateAiCareAdvice } from "@/services/aiCareService";
-import type { AiCareAdvice, AiCareInput } from "@/types";
+import type { AiCareAdvice, AiCareInput } from "@/data/types";
 
 const DEEPSEEK_API_URL = "https://api.deepseek.com/chat/completions";
 const DEFAULT_MODEL = "deepseek-chat";
@@ -8,26 +8,27 @@ const DISCLAIMER = "智能建议仅供参考，不能替代兽医诊断；如宠
 
 function normalizeInput(body: Partial<AiCareInput>): AiCareInput {
   return {
-    petType: body.petType === "猫咪" || body.petType === "小宠" ? body.petType : "狗狗",
+    petType: body.petType === "cat" || body.petType === "small" ? body.petType : "dog",
     breed: String(body.breed ?? "混合品种").slice(0, 40),
-    age: body.age === "幼年" || body.age === "老年" ? body.age : "成年",
-    size: body.size === "小型" || body.size === "中型" ? body.size : "中大型",
+    age: body.age === "puppy" || body.age === "senior" ? body.age : "adult",
+    size: body.size === "small" || body.size === "medium" ? body.size : "large",
     weight: String(body.weight ?? "").slice(0, 20),
-    activityLevel: body.activityLevel === "偏低" || body.activityLevel === "较高" ? body.activityLevel : "适中",
-    health: body.health === "轻微超重" || body.health === "术后恢复" || body.health === "关节敏感" ? body.health : "健康",
+    activityLevel: body.activityLevel === "low" || body.activityLevel === "high" ? body.activityLevel : "medium",
+    health: body.health === "overweight" || body.health === "recovery" || body.health === "joint" ? body.health : "healthy",
     healthNote: String(body.healthNote ?? "").slice(0, 180),
-    weather: body.weather === "炎热" || body.weather === "小雨" || body.weather === "寒冷" ? body.weather : "晴朗",
-    time: body.time === "15分钟" || body.time === "30分钟" || body.time === "60分钟" ? body.time : "45分钟",
-    hasTracker: body.hasTracker === "未佩戴" ? "未佩戴" : "已佩戴",
+    weather: body.weather === "hot" || body.weather === "rain" || body.weather === "cold" ? body.weather : "clear",
+    time: body.time === "15" || body.time === "30" || body.time === "60" ? body.time : "45",
+    hasTracker: body.hasTracker === "no" ? "no" : "yes",
     locationScenario:
-      body.locationScenario === "日常遛狗" ||
-      body.locationScenario === "室内陪伴" ||
-      body.locationScenario === "旅行" ||
-      body.locationScenario === "寄养" ||
-      body.locationScenario === "生病恢复期" ||
-      body.locationScenario === "户外"
+      body.locationScenario === "walk" ||
+      body.locationScenario === "indoor" ||
+      body.locationScenario === "travel" ||
+      body.locationScenario === "boarding" ||
+      body.locationScenario === "recovery" ||
+      body.locationScenario === "home" ||
+      body.locationScenario === "outdoor"
         ? body.locationScenario
-        : "室内陪伴",
+        : "indoor",
     userQuestion: String(body.userQuestion ?? "").slice(0, 240)
   };
 }

@@ -1,32 +1,34 @@
 import { ServiceCard } from "@/components/Cards";
 import { PageHero } from "@/components/PageHero";
 import { ServiceLeadForm } from "@/components/ServiceLeadForm";
-import { getPageHeroImages, getServices } from "@/services/content";
+import { getServices } from "@/lib/content";
+import { getPageHeroImages } from "@/lib/siteSettings";
+import { getLocale } from "@/i18n/server";
+import { getPageDictionary } from "@/i18n/pageDictionaries";
+import { pick } from "@/i18n/index";
 
 export default function BoardingPage() {
+  const locale = getLocale();
+  const t = getPageDictionary(locale).boarding;
   const services = getServices();
   const heroImages = getPageHeroImages();
   return (
     <>
       <PageHero
-        eyebrow="宠物寄养"
-        title="让寄养服务更透明、更安心"
-        description="展示寄养环境、服务记录与未来寄养监控方案，帮助主人建立信任。"
+        eyebrow={t.eyebrow}
+        title={t.title}
+        description={t.desc}
         image={heroImages.boarding}
-        imageAlt="宠物寄养空间"
+        imageAlt={t.title}
       />
       <section className="section compact">
         <div className="container product-showcase">
           <div className="service-pricing">
-            {[
-              ["日间寄养", "适合白天照护", "环境展示 / 饮水喂食 / 图文反馈"],
-              ["过夜寄养", "适合短途出行", "独立休息区 / 晚间巡检 / 次日报告"],
-              ["透明看护", "适合敏感宠物", "监控规划 / 服务留痕 / 异常提醒"]
-            ].map(([title, sub, detail]) => (
-              <article className="card feature-card" key={title}>
-                <span className="tag">{sub}</span>
-                <h3 style={{ marginTop: 14 }}>{title}</h3>
-                <p>{detail}</p>
+            {t.pricing.map((item) => (
+              <article className="card feature-card" key={item.title}>
+                <span className="tag">{item.sub}</span>
+                <h3 style={{ marginTop: 14 }}>{item.title}</h3>
+                <p>{item.detail}</p>
               </article>
             ))}
           </div>
@@ -34,13 +36,13 @@ export default function BoardingPage() {
             {services.map((service) => <ServiceCard key={service.id} service={service} />)}
           </div>
           <div className="service-checklist">
-            {["疫苗记录", "过敏禁忌", "饮食作息", "紧急联系人", "牵引规范", "日报授权"].map((item) => <span key={item}>{item}</span>)}
+            {t.checklist.map((item) => <span key={item}>{item}</span>)}
           </div>
           <div className="grid cols-3">
             {services.slice(0, 3).map((service) => (
               <article className="card feature-card" key={service.id}>
-                <span className="tag">{service.name}流程</span>
-                {service.processSteps.map((step, index) => <p key={step}>{index + 1}. {step}</p>)}
+                <span className="tag">{pick(service.name, locale)}{t.processSuffix}</span>
+                {service.processSteps.map((step, index) => <p key={pick(step, locale)}>{index + 1}. {pick(step, locale)}</p>)}
               </article>
             ))}
           </div>

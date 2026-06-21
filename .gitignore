@@ -10,3 +10,7 @@ dist
 .claude/deploy_key
 .claude/deploy_key.pub
 storage/
+public/assets/uploads/
+.impeccable/
+.superpowers/
+*.tsbuildinfo

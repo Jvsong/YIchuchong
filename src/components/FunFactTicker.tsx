@@ -2,10 +2,15 @@
 
 import { useEffect, useMemo, useState } from "react";
 import { X } from "lucide-react";
-import { getFunFacts } from "@/services/content";
+import type { FunFact } from "@/data/types";
+import { useLocale } from "@/i18n/LocaleProvider";
+import { pick } from "@/i18n/index";
+import { tt } from "@/i18n/terms";
 
-export function FunFactTicker() {
-  const facts = useMemo(() => getFunFacts("home").slice(0, 12), []);
+/** facts 由 server 端（lib/content.getFunFacts）筛选后以 props 下传，确保后台编辑实时生效。 */
+export function FunFactTicker({ facts: allFacts }: { facts: FunFact[] }) {
+  const { locale, dict } = useLocale();
+  const facts = useMemo(() => allFacts.slice(0, 12), [allFacts]);
   const [index, setIndex] = useState(0);
   const [closed, setClosed] = useState(false);
 
@@ -24,17 +29,16 @@ export function FunFactTicker() {
   const fact = facts[index];
 
   return (
-    <div className="fact-ticker" role="region" aria-label="宠物科普提示">
+    <div className="fact-ticker" role="region" aria-label={dict.a11y.factRegion}>
       <div className="container fact-ticker-inner">
-        <span className="fact-kicker">你知道吗？</span>
-        <span className="fact-tag">{fact.type}</span>
+        <span className="fact-tag">{tt(fact.type, locale)}</span>
         <p key={fact.id} className="fact-copy" aria-live="polite">
-          {fact.body}
+          {pick(fact.body, locale)}
         </p>
         <button
           className="fact-close"
           type="button"
-          aria-label="关闭宠物科普提示"
+          aria-label={dict.a11y.factClose}
           onClick={() => setClosed(true)}
         >
           <X size={16} aria-hidden="true" />

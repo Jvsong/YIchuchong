@@ -1,12 +1,12 @@
 import type { NavigationItem } from "./types";
 
 export const navItems: NavigationItem[] = [
-  { href: "/", label: "首页" },
-  { href: "/locator", label: "定位器" },
-  { href: "/devices", label: "智能设备" },
-  { href: "/ai-care", label: "养宠建议" },
-  { href: "/wiki", label: "百科" },
-  { href: "/news", label: "资讯" },
-  { href: "/boarding", label: "服务" },
-  { href: "/about", label: "关于" }
+  { href: "/", label: { zh: "首页", en: "Home" } },
+  { href: "/locator", label: { zh: "定位器", en: "Tracker" } },
+  { href: "/devices", label: { zh: "智能设备", en: "Devices" } },
+  { href: "/ai-care", label: { zh: "养宠建议", en: "Care Advice" } },
+  { href: "/wiki", label: { zh: "百科", en: "Encyclopedia" } },
+  { href: "/news", label: { zh: "资讯", en: "News" } },
+  { href: "/boarding", label: { zh: "服务", en: "Services" } },
+  { href: "/about", label: { zh: "关于", en: "About" } }
 ];

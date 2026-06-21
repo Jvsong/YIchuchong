@@ -1,21 +1,24 @@
 import { NewsExplorer } from "@/components/NewsExplorer";
 import { PageHero } from "@/components/PageHero";
-import { getPageHeroImages } from "@/services/content";
-import { getNewsList } from "@/lib/serverData";
+import { getPageHeroImages } from "@/lib/siteSettings";
+import { getNews } from "@/lib/content";
+import { getLocale } from "@/i18n/server";
+import { getPageDictionary } from "@/i18n/pageDictionaries";
 
 export const dynamic = 'force-dynamic';
 
 export default function NewsPage() {
-  const newsItems = getNewsList();
+  const t = getPageDictionary(getLocale()).news;
+  const newsItems = getNews();
   const heroImages = getPageHeroImages();
   return (
     <>
       <PageHero
-        eyebrow="宠物资讯"
-        title="今日宠物热点与智能养宠科普"
-        description="覆盖新手养宠、走失预防、智能设备、寄养注意和服务安全。"
+        eyebrow={t.eyebrow}
+        title={t.title}
+        description={t.desc}
         image={heroImages.news}
-        imageAlt="主人查看宠物资讯"
+        imageAlt={t.title}
       />
       <section className="section compact">
         <div className="container">

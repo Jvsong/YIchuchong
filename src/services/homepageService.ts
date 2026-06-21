@@ -1,21 +1,6 @@
-import { collectionCards, ecoCategories, heroImages, homeConfig, pageHeroImages, smartEcosystem } from "@/data/homepage";
+import { collectionCards, smartEcosystem } from "@/data/homepage";
 
-export function getHomeConfig() {
-  return homeConfig;
-}
-
-export function getHeroImages() {
-  return heroImages;
-}
-
-export function getPageHeroImages() {
-  return pageHeroImages;
-}
-
-export function getEcoCategories() {
-  return ecoCategories;
-}
-
+// 首页静态卡片（非后台可编辑）。hero 文案/各页背景图等改由 lib/siteSettings 提供（可编辑）。
 export function getCollectionCards() {
   return collectionCards;
 }

@@ -1,21 +1,24 @@
 import { PageHero } from "@/components/PageHero";
 import { WikiExplorer } from "@/components/WikiExplorer";
-import { getPageHeroImages } from "@/services/content";
-import { getBreedList } from "@/lib/serverData";
+import { getPageHeroImages } from "@/lib/siteSettings";
+import { getBreeds } from "@/lib/content";
+import { getLocale } from "@/i18n/server";
+import { getPageDictionary } from "@/i18n/pageDictionaries";
 
 export const dynamic = 'force-dynamic';
 
 export default function WikiPage() {
-  const breeds = getBreedList();
+  const t = getPageDictionary(getLocale()).wiki;
+  const breeds = getBreeds();
   const heroImages = getPageHeroImages();
   return (
     <>
       <PageHero
-        eyebrow="宠物百科"
-        title="狗狗、猫咪与小宠的养护知识库"
-        description="覆盖狗狗、猫咪和小宠的差异化养护信息，支持分类、搜索、标签筛选和详情页，方便后续接入真实宠物数据库。"
+        eyebrow={t.eyebrow}
+        title={t.title}
+        description={t.desc}
         image={heroImages.wiki}
-        imageAlt="猫咪百科图片"
+        imageAlt={t.title}
       />
       <section className="section compact">
         <div className="container">

@@ -1,100 +1,136 @@
 import Image from "next/image";
-import { ProductCard } from "@/components/Cards";
-import { PageHero } from "@/components/PageHero";
-import { getCoreProduct, getPageHeroImages } from "@/services/content";
+import Link from "next/link";
+import { getCoreProduct } from "@/lib/content";
+import { getHomeStoryImages, getPageHeroImages } from "@/lib/siteSettings";
+import { getLocale } from "@/i18n/server";
+import { getPageDictionary } from "@/i18n/pageDictionaries";
+import { pick, pickList } from "@/i18n/index";
 
 export default function LocatorPage() {
+  const locale = getLocale();
+  const t = getPageDictionary(locale).locator;
   const tracker = getCoreProduct();
   const heroImages = getPageHeroImages();
-  const productSpecs = [
-    ["适用场景", "日常遛狗、寄养、家庭共享"],
-    ["核心能力", "定位、围栏、轨迹、提醒"],
-    ["设备状态", "核心产品展示"],
-    ["服务支持", "上新提醒与咨询入口"]
-  ];
+  const story = getHomeStoryImages();
+  if (!tracker) return null;
+  const scenarioText = pickList(tracker.scenarios, locale).join(locale === "zh" ? "、" : ", ");
+
   return (
     <>
-      <PageHero
-        eyebrow="核心产品"
-        title="宠物定位器，把走失预防放在日常"
-        description="实时定位、历史轨迹、电子围栏、低电量提醒、丢宠协寻和家庭共享，是易趣宠生态的第一块拼图。"
-        image={heroImages.locator}
-        imageAlt="易趣宠宠物定位器场景"
-      >
-        <div className="hero-actions">
-          <span className="ghost-pill">实时定位在线</span>
-          <span className="ghost-pill">电子围栏已开启</span>
-        </div>
-      </PageHero>
-      <section className="section compact">
-        <div className="container product-showcase">
-          <div className="product-buy-panel">
-            <div>
-              <span className="eyebrow">Product Detail</span>
-              <h2>易趣宠定位器</h2>
-              <p>当前重点展示产品能力和预约咨询入口。真实售价、套餐和硬件参数以上线版本为准。</p>
+      <section className="tracker-product-hero">
+        <div className="container tracker-product-grid">
+          <div className="tracker-product-gallery">
+            <div className="tracker-product-main-image">
+              <Image src={tracker.coverImage} alt={t.title} fill priority sizes="(max-width: 980px) 100vw, 58vw" />
             </div>
-            <div className="buy-actions">
-              <a className="pill" href="#locator-lead">获取上新提醒</a>
-              <a className="ghost-pill" href="#locator-faq">查看常见问题</a>
+            <div className="tracker-product-gallery-row">
+              {[heroImages.locator, ...tracker.gallery].slice(0, 3).map((image, index) => (
+                <div key={`${image}-${index}`}><Image src={image} alt={`${t.title} ${index + 2}`} fill sizes="180px" /></div>
+              ))}
             </div>
           </div>
-          <div className="spec-grid">
-            {productSpecs.map(([label, value]) => (
-              <article className="card feature-card" key={label}>
-                <span className="tag">{label}</span>
-                <h3 style={{ marginTop: 14 }}>{value}</h3>
+          <div className="tracker-product-copy">
+            <span className="product-detail-status">{t.eyebrow}</span>
+            <h1>{t.title}</h1>
+            <p className="lead">{t.desc}</p>
+            <div className="tracker-live-badges"><span>{t.liveBadge}</span><span>{t.fenceBadge}</span></div>
+            <div className="product-detail-actions">
+              <a className="pill" href="#locator-lead">{t.getAlerts}</a>
+              <a className="ghost-pill" href="#locator-specs">{t.exploreFeatures}</a>
+            </div>
+            <p className="tracker-product-note">{t.heroNote}</p>
+          </div>
+        </div>
+      </section>
+
+      <section className="tracker-spec-section" id="locator-specs">
+        <div className="container">
+          <div className="tracker-spec-head">
+            <div><span className="section-label">{t.detailKicker}</span><h2>{t.detailTitle}</h2></div>
+            <p>{t.detailText}</p>
+          </div>
+          <div className="tracker-spec-row">
+            {t.specs.map((spec) => (
+              <article key={spec.label}>
+                <span>{spec.label}</span>
+                <strong>{spec.value}</strong>
               </article>
             ))}
           </div>
-          <div className="locator-stage">
-            <div className="locator-photo"><Image src="/assets/pets/hero/hero-dog-safety-walk-001.jpg" alt="户外安全遛狗轨迹场景" width={1200} height={760} /></div>
+        </div>
+      </section>
+
+      <section className="tracker-story-section">
+        <div className="container tracker-story-grid">
+          <div className="tracker-story-media">
+            <Image src={story.locatorShowcase} alt={t.title} fill sizes="(max-width: 980px) 100vw, 62vw" />
             <div className="map-panel">
-              <span className="tag">路线记录</span>
-              <h3>家附近 1.2 公里安全活动圈</h3>
-              <p>用简洁路线、安全区域和定位点表现外出守护体验；真实轨迹数据由后续硬件和 App 接入。</p>
+              <span className="tag">{t.routeTag}</span>
+              <h3>{t.routeTitle}</h3>
+              <p>{t.routeText}</p>
               <div className="map-path" aria-hidden="true"><span /><span /><span /></div>
             </div>
           </div>
-          <div className="grid cols-4">
+          <div className="tracker-story-copy">
+            <span className="section-label">{t.connectedLabel}</span>
+            <h2>{t.connectedTitle}</h2>
+            <p>{scenarioText}{t.capabilityNoteSuffix}</p>
+            <Link className="text-link" href="/partners">{t.demoCta} <span aria-hidden="true">→</span></Link>
+          </div>
+        </div>
+      </section>
+
+      <section className="tracker-capability-section">
+        <div className="container">
+          <div className="product-detail-section-head">
+            <span className="section-label">{t.capabilityTag}</span>
+            <h2>{t.capabilityTitle}</h2>
+          </div>
+          <div className="tracker-capability-list">
             {tracker.features.map((feature) => (
-              <article className="card feature-card" key={feature}>
-                <span className="tag">定位器能力</span>
-                <h3 style={{ marginTop: 14 }}>{feature}</h3>
-                <p>{tracker.scenarios.join("、")}等场景都能通过定位器形成安全记录。</p>
+              <article key={pick(feature, locale)}>
+                <h3>{pick(feature, locale)}</h3>
+                <p>{scenarioText}{t.capabilityNoteSuffix}</p>
               </article>
             ))}
           </div>
-          <div className="grid cols-3">
-            <ProductCard product={tracker} />
-            {["日常遛狗", "宠物寄养", "走失协寻"].map((scene) => (
-              <article className="card feature-card" key={scene}>
-                <span className="tag">场景</span>
-                <h3 style={{ marginTop: 14 }}>{scene}</h3>
-                <p>通过家庭共享、轨迹复盘和协寻模板，把突发风险前置到日常管理里。</p>
+        </div>
+      </section>
+
+      <section className="tracker-scenes-section">
+        <div className="container">
+          <div className="tracker-scenes-head"><span className="section-label light">{t.sceneTag}</span><h2>{t.scenesTitle}</h2></div>
+          <div className="tracker-scenes-grid">
+            {t.scenes.map((scene) => (
+              <article key={scene}>
+                <h3>{scene}</h3>
+                <p>{t.sceneNote}</p>
               </article>
             ))}
           </div>
-          <div className="faq-grid" id="locator-faq">
-            {[
-              "定位器适合猫还是狗？",
-              "没电会提醒吗？",
-              "可以看历史轨迹吗？",
-              "家人能不能一起看？",
-              "定位器是否替代牵引绳？",
-              "电子围栏会限制宠物活动吗？"
-            ].map((question) => (
-              <article className="card feature-card" key={question}>
+        </div>
+      </section>
+
+      <section className="tracker-faq-section" id="locator-faq">
+        <div className="container tracker-faq-grid">
+          <div><span className="section-label">FAQ</span><h2>{t.faqTitle}</h2><a className="ghost-pill" href="#locator-lead">{t.viewFaq}</a></div>
+          <div className="tracker-faq-list">
+            {t.faq.map((question) => (
+              <article key={question}>
                 <h3>{question}</h3>
-                <p>不会替代线下安全措施。定位器提供提醒和记录，真正的安全仍来自牵引、训练和及时响应。</p>
+                <p>{t.faqAnswer}</p>
               </article>
             ))}
           </div>
-          <div id="locator-lead" className="card feature-card">
-            <span className="eyebrow">上新提醒</span>
-            <h2 style={{ fontSize: "2.4rem", marginTop: 14 }}>想了解定位器上线、套餐和试用计划？</h2>
-            <p>当前不展示虚构价格和库存。后续接入真实后端后，可在这里连接预约、库存、售后和门店咨询。</p>
-            <a className="pill" href="/partners">联系合作与咨询</a>
+        </div>
+      </section>
+
+      <section className="tracker-lead-section" id="locator-lead">
+        <div className="container tracker-lead-inner">
+          <div><span className="section-label light">{t.leadKicker}</span><h2>{t.leadTitle}</h2></div>
+          <div>
+            <p>{t.leadText}</p>
+            <a className="pill" href="/partners">{t.contactCta}</a>
           </div>
         </div>
       </section>

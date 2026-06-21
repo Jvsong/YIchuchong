@@ -1,3 +1,8 @@
+import type { LocalizedText } from "@/i18n/index";
+import type { BadgeLevel, NewsStatus, ProductStatus, ServiceStatus, TaskStatus } from "@/i18n/enums";
+
+export type { LocalizedText } from "@/i18n/index";
+
 export type ImageCategory =
   | "hero"
   | "dogs"
@@ -37,45 +42,55 @@ export type PhotoAsset = {
   pageUsage?: (string | { page: string; role: string; priority: number })[];
   checkedAt?: string;
   checkDate?: string;
+  breedSlug?: string;
+  identityVerified?: boolean;
+  licenseVerified?: boolean;
+  adminOnlyAttribution?: boolean;
+  contentHash?: string;
+  verificationNote?: string;
   notes: string;
 };
 
 export type NewsItem = {
   id: string;
-  title: string;
+  title: LocalizedText;
   category: string;
-  summary: string;
-  content: string;
+  summary: LocalizedText;
+  content: LocalizedText;
   tags: string[];
-  sourceName: string;
+  sourceName: LocalizedText;
   sourceUrl: string;
   publishDate: string;
   date: string;
-  readTime: string;
+  readTime: LocalizedText;
   coverImage: string;
   image: string;
   relatedProductIds: string[];
   relatedServiceIds: string[];
-  status: "已发布" | "草稿";
+  status: NewsStatus;
 };
 
 export type Breed = {
   id: string;
   slug: string;
-  name: string;
+  name: LocalizedText;
   englishName: string;
   species: "dog" | "cat" | "small-pet";
   size: string;
-  temperament: string;
+  temperament: LocalizedText;
   careLevel: string;
   activityLevel: string;
   activity: string;
-  summary: string;
-  suitablePeople: string;
-  dailyExercise: string;
-  feedingTips: string;
-  healthRisks: string;
-  deviceSuggestion: string;
+  summary: LocalizedText;
+  suitablePeople: LocalizedText;
+  dailyExercise: LocalizedText;
+  feedingTips: LocalizedText;
+  healthRisks: LocalizedText;
+  deviceSuggestion: LocalizedText;
+  lifespan: LocalizedText;
+  groomingNeeds: LocalizedText;
+  environmentNeeds: LocalizedText;
+  safetyTips: LocalizedText;
   coverImage: string;
   image: string;
   tags: string[];
@@ -85,27 +100,25 @@ export type FunFact = {
   id: string;
   category: string;
   type: string;
-  title: string;
-  body: string;
+  title: LocalizedText;
+  body: LocalizedText;
   pageScope: string[];
   priority: number;
   relatedLink: string;
   enabled: boolean;
-  status: "启用" | "停用";
 };
 
 export type Product = {
   id: string;
   slug: string;
-  name: string;
+  name: LocalizedText;
   category: string;
-  statusLabel: "核心产品" | "生态规划" | "即将接入" | "未来能力";
-  status: "核心产品" | "生态规划" | "即将接入" | "未来能力";
-  summary: string;
-  description: string;
-  features: string[];
-  scenarios: string[];
-  futureIntegrations: string[];
+  status: ProductStatus;
+  summary: LocalizedText;
+  description: LocalizedText;
+  features: LocalizedText[];
+  scenarios: LocalizedText[];
+  futureIntegrations: LocalizedText[];
   coverImage: string;
   image: string;
   gallery: string[];
@@ -116,55 +129,54 @@ export type Product = {
 export type Service = {
   id: string;
   slug: string;
-  name: string;
+  name: LocalizedText;
   category: string;
-  statusLabel: "展示中" | "生态规划" | "未来能力";
-  status: "展示中" | "生态规划" | "未来能力";
-  summary: string;
-  description: string;
-  processSteps: string[];
-  safetyRules: string[];
-  requiredInfo: string[];
-  points: string[];
+  status: ServiceStatus;
+  summary: LocalizedText;
+  description: LocalizedText;
+  processSteps: LocalizedText[];
+  safetyRules: LocalizedText[];
+  requiredInfo: LocalizedText[];
+  points: LocalizedText[];
   coverImage: string;
   image: string;
   relatedProducts: string[];
 };
 
 export type HomeConfig = {
-  heroTitle: string;
-  heroSubtitle: string;
-  primaryAction: string;
-  secondaryAction: string;
+  heroTitle: LocalizedText;
+  heroSubtitle: LocalizedText;
+  primaryAction: LocalizedText;
+  secondaryAction: LocalizedText;
 };
 
 export type NavigationItem = {
   href: string;
-  label: string;
+  label: LocalizedText;
 };
 
 export type GamificationTask = {
   id: string;
-  title: string;
+  title: LocalizedText;
   category: string;
   points: number;
-  summary: string;
+  summary: LocalizedText;
   linkedData: string;
-  status: "今日推荐" | "可完成" | "未来联动";
+  status: TaskStatus;
 };
 
 export type Badge = {
   id: string;
-  name: string;
-  requirement: string;
-  level: "基础" | "进阶" | "稀有";
+  name: LocalizedText;
+  requirement: LocalizedText;
+  level: BadgeLevel;
 };
 
 export type ExplorationSpot = {
   id: string;
-  name: string;
-  scene: string;
-  unlockRule: string;
+  name: LocalizedText;
+  scene: LocalizedText;
+  unlockRule: LocalizedText;
 };
 
 export type RankingUser = {
@@ -176,27 +188,37 @@ export type RankingUser = {
 };
 
 export type GamificationConfig = {
-  modules: { title: string; value: string; text: string }[];
+  modules: { title: LocalizedText; value: string; text: LocalizedText }[];
   tasks: GamificationTask[];
   badges: Badge[];
   explorationSpots: ExplorationSpot[];
   rankings: RankingUser[];
-  growthRules: string[];
+  growthRules: LocalizedText[];
 };
 
+export type PetType = "dog" | "cat" | "small";
+export type PetAge = "puppy" | "adult" | "senior";
+export type PetSize = "small" | "medium" | "large";
+export type PetActivity = "low" | "medium" | "high";
+export type PetHealth = "healthy" | "overweight" | "recovery" | "joint";
+export type Weather = "clear" | "hot" | "rain" | "cold";
+export type AvailableTime = "15" | "30" | "45" | "60";
+export type TrackerState = "yes" | "no";
+export type CareScenario = "walk" | "indoor" | "travel" | "boarding" | "recovery" | "home" | "outdoor";
+
 export type AiCareInput = {
-  petType: "狗狗" | "猫咪" | "小宠";
+  petType: PetType;
   breed: string;
-  age: "幼年" | "成年" | "老年";
-  size: "小型" | "中型" | "中大型";
+  age: PetAge;
+  size: PetSize;
   weight?: string;
-  activityLevel?: "偏低" | "适中" | "较高";
-  health: "健康" | "轻微超重" | "术后恢复" | "关节敏感";
+  activityLevel?: PetActivity;
+  health: PetHealth;
   healthNote?: string;
-  weather: "晴朗" | "炎热" | "小雨" | "寒冷";
-  time: "15分钟" | "30分钟" | "45分钟" | "60分钟";
-  hasTracker: "已佩戴" | "未佩戴";
-  locationScenario?: "日常遛狗" | "室内陪伴" | "旅行" | "寄养" | "生病恢复期" | "居家" | "户外";
+  weather: Weather;
+  time: AvailableTime;
+  hasTracker: TrackerState;
+  locationScenario?: CareScenario;
   userQuestion?: string;
 };
 

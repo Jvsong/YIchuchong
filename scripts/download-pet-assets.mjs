@@ -6,6 +6,7 @@ import { promisify } from "node:util";
 
 const root = dirname(dirname(fileURLToPath(import.meta.url)));
 const baseDir = join(root, "public/assets/pets");
+const privateLibraryDir = join(root, "src/data/private");
 const license = "Pexels License, free to use; attribution appreciated but not required";
 
 const shared = {
@@ -128,5 +129,6 @@ for (const [fileName, category, species, breed, scene, usage, photoId] of rows) 
   });
 }
 
-await writeFile(join(baseDir, "photo-library.json"), `${JSON.stringify(library, null, 2)}\n`);
+await mkdir(privateLibraryDir, { recursive: true });
+await writeFile(join(privateLibraryDir, "photo-library.json"), `${JSON.stringify(library, null, 2)}\n`);
 console.log(`Prepared ${library.length} pet assets in ${baseDir}`);

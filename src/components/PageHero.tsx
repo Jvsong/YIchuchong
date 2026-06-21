@@ -1,5 +1,8 @@
+"use client";
+
 import Image from "next/image";
 import type { ReactNode } from "react";
+import { useLocale } from "@/i18n/LocaleProvider";
 
 export function PageHero({
   eyebrow,
@@ -16,6 +19,7 @@ export function PageHero({
   imageAlt: string;
   children?: ReactNode;
 }) {
+  const { dict } = useLocale();
   return (
     <section className="page-hero">
       <Image className="page-hero-bg" src={image} alt="" fill priority sizes="100vw" />
@@ -29,8 +33,8 @@ export function PageHero({
         <div className="page-hero-media">
           <Image src={image} alt={imageAlt} width={900} height={620} priority />
           <div className="page-hero-card" aria-hidden="true">
-            <span>YiQu Pet Ecosystem</span>
-            <strong>定位 · 看护 · 建议</strong>
+            <span>Epet Ecosystem</span>
+            <strong>{dict.pageHero.badge}</strong>
           </div>
         </div>
       </div>

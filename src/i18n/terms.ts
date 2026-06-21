@@ -1,0 +1,165 @@
+import { pick, type Locale, type LocalizedText } from "./index";
+
+/** 高频重复的枚举式中文 → 多语映射，供数据生成器与展示复用，保证一致性。 */
+const TERMS: Record<string, { en: string; es: string }> = {
+  // 体型 size
+  小型: { en: "Small", es: "Pequeño" },
+  中型: { en: "Medium", es: "Mediano" },
+  大型: { en: "Large", es: "Grande" },
+  中大型: { en: "Medium-large", es: "Mediano-grande" },
+  中小型: { en: "Small-medium", es: "Pequeño-mediano" },
+  "小型/中型": { en: "Small / Medium", es: "Pequeño / Mediano" },
+  "中型/大型": { en: "Medium / Large", es: "Mediano / Grande" },
+  // 养护难度 careLevel
+  中等: { en: "Moderate", es: "Moderado" },
+  较高: { en: "Higher", es: "Alto" },
+  较低: { en: "Lower", es: "Bajo" },
+  // 活动需求 activityLevel
+  高: { en: "High", es: "Alto" },
+  中: { en: "Medium", es: "Medio" },
+  低: { en: "Low", es: "Bajo" },
+  中高: { en: "Medium-high", es: "Medio-alto" },
+  低中: { en: "Low-medium", es: "Bajo-medio" },
+  // 品种标签 tags
+  亲人: { en: "Affectionate", es: "Cariñoso" },
+  户外: { en: "Outdoor", es: "Exterior" },
+  家庭: { en: "Family", es: "Familiar" },
+  城市: { en: "Urban", es: "Urbano" },
+  活泼: { en: "Lively", es: "Activo" },
+  控重: { en: "Weight control", es: "Control de peso" },
+  独立: { en: "Independent", es: "Independiente" },
+  牵引: { en: "Leash", es: "Correa" },
+  高能: { en: "High energy", es: "Mucha energía" },
+  训练: { en: "Training", es: "Entrenamiento" },
+  探索: { en: "Exploration", es: "Exploración" },
+  聪明: { en: "Smart", es: "Inteligente" },
+  美容: { en: "Grooming", es: "Estética" },
+  运动: { en: "Exercise", es: "Ejercicio" },
+  嗅闻: { en: "Scent-driven", es: "Olfativo" },
+  走失预防: { en: "Loss prevention", es: "Prevención de pérdidas" },
+  防走失: { en: "Loss prevention", es: "Prevención de pérdidas" },
+  短鼻犬: { en: "Brachycephalic", es: "Braquicéfalo" },
+  短鼻: { en: "Brachycephalic", es: "Braquicéfalo" },
+  公寓: { en: "Apartment", es: "Apartamento" },
+  低强度: { en: "Low intensity", es: "Baja intensidad" },
+  大型犬: { en: "Large dog", es: "Perro grande" },
+  守护: { en: "Guarding", es: "Guardián" },
+  健康: { en: "Health", es: "Salud" },
+  毛发: { en: "Coat care", es: "Cuidado del pelaje" },
+  避暑: { en: "Heat care", es: "Cuidado del calor" },
+  短腿: { en: "Short legs", es: "Patas cortas" },
+  腰椎: { en: "Spine care", es: "Cuidado de columna" },
+  怕热: { en: "Heat sensitive", es: "Sensible al calor" },
+  夜行: { en: "Nocturnal", es: "Nocturno" },
+  小宠: { en: "Small pet", es: "Mascota pequeña" },
+  室内: { en: "Indoor", es: "Interior" },
+  安静: { en: "Calm", es: "Tranquilo" },
+  长毛: { en: "Long coat", es: "Pelo largo" },
+  温顺: { en: "Gentle", es: "Dócil" },
+  陪伴: { en: "Companionship", es: "Compañía" },
+  攀爬: { en: "Climbing", es: "Trepador" },
+  互动: { en: "Interactive", es: "Interactivo" },
+  话多: { en: "Vocal", es: "Vocal" },
+  粘人: { en: "Clingy", es: "Apegado" },
+  群居: { en: "Social", es: "Sociable" },
+  维C: { en: "Vitamin C", es: "Vitamina C" },
+  飞行: { en: "Flight space", es: "Espacio de vuelo" },
+  防逃逸: { en: "Escape-proof", es: "A prueba de fugas" },
+  温控: { en: "Temperature control", es: "Control de temperatura" },
+  长期: { en: "Long-term care", es: "Cuidado a largo plazo" },
+  保暖: { en: "Warmth", es: "Abrigo" },
+  护理: { en: "Grooming care", es: "Cuidados" },
+  敏感: { en: "Sensitive", es: "Sensible" },
+  关节: { en: "Joint care", es: "Cuidado articular" },
+  稳定: { en: "Stable", es: "Estable" },
+  丰容: { en: "Enrichment", es: "Enriquecimiento" },
+  警觉: { en: "Alert", es: "Alerta" },
+  新手: { en: "Beginner", es: "Principiante" },
+  空间: { en: "Space", es: "Espacio" },
+  喂养: { en: "Feeding", es: "Alimentación" },
+  // 资讯标签 news tags
+  高温: { en: "Heat", es: "Calor" },
+  遛狗: { en: "Dog walking", es: "Paseo de perros" },
+  安全: { en: "Safety", es: "Seguridad" },
+  定位器: { en: "Tracker", es: "Localizador" },
+  电子围栏: { en: "Geo-fence", es: "Geocerca" },
+  产品科普: { en: "Product basics", es: "Conceptos del producto" },
+  猫咪: { en: "Cats", es: "Gatos" },
+  远程看护: { en: "Remote care", es: "Cuidado remoto" },
+  寄养: { en: "Boarding", es: "Hospedaje" },
+  服务: { en: "Services", es: "Servicios" },
+  行为: { en: "Behavior", es: "Comportamiento" },
+  饮水: { en: "Hydration", es: "Hidratación" },
+  代溜: { en: "Dog walking", es: "Paseo de perros" },
+  轨迹: { en: "Tracks", es: "Rutas" },
+  评价: { en: "Reviews", es: "Reseñas" },
+  成长值: { en: "Growth points", es: "Puntos de progreso" },
+  打卡: { en: "Check-in", es: "Registro" },
+  多宠: { en: "Multi-pet", es: "Varias mascotas" },
+  家庭共享: { en: "Family sharing", es: "Uso en familia" },
+  档案: { en: "Profiles", es: "Perfiles" },
+  协寻: { en: "Search help", es: "Ayuda de búsqueda" },
+  饮水机: { en: "Fountain", es: "Fuente" },
+  维护: { en: "Maintenance", es: "Mantenimiento" },
+  夏季: { en: "Summer", es: "Verano" },
+  安全档案: { en: "Safety profile", es: "Perfil de seguridad" },
+  监控器: { en: "Camera", es: "Cámara" },
+  日报: { en: "Daily report", es: "Informe diario" },
+  门店: { en: "Store", es: "Tienda" },
+  路线: { en: "Routes", es: "Rutas" },
+  生态: { en: "Ecosystem", es: "Ecosistema" },
+  内容: { en: "Content", es: "Contenido" },
+  科普: { en: "Know-how", es: "Conocimientos" },
+  // 新闻分类 news categories
+  宠物安全: { en: "Pet Safety", es: "Seguridad" },
+  智能设备: { en: "Smart Devices", es: "Dispositivos" },
+  新手养宠: { en: "New Owners", es: "Nuevos dueños" },
+  宠物健康: { en: "Pet Health", es: "Salud" },
+  宠物服务: { en: "Pet Services", es: "Servicios" },
+  行业趋势: { en: "Industry Trends", es: "Tendencias" },
+  // 状态标签 status labels
+  核心产品: { en: "Core Product", es: "Producto principal" },
+  生态规划: { en: "Ecosystem Plan", es: "Plan de ecosistema" },
+  即将接入: { en: "Coming Soon", es: "Próximamente" },
+  未来能力: { en: "Future Capability", es: "Capacidad futura" },
+  展示中: { en: "Available", es: "Disponible" },
+  // 产品/服务分类 product & service categories
+  智能喂养: { en: "Smart Feeding", es: "Alimentación inteligente" },
+  猫咪照护: { en: "Cat Care", es: "Cuidado de gatos" },
+  健康观察: { en: "Health Tracking", es: "Seguimiento de salud" },
+  服务设备: { en: "Service Devices", es: "Dispositivos de servicio" },
+  可穿戴设备: { en: "Wearables", es: "Wearables" },
+  数据服务: { en: "Data Service", es: "Servicio de datos" },
+  透明看护: { en: "Transparent Care", es: "Cuidado transparente" },
+  上门服务: { en: "On-site Service", es: "Servicio a domicilio" },
+  合作生态: { en: "Partner Ecosystem", es: "Ecosistema de aliados" },
+  安全服务: { en: "Safety Service", es: "Servicio de seguridad" },
+  档案服务: { en: "Profile Service", es: "Servicio de perfil" },
+  // 小科普分类 fun-fact categories
+  定位器科普: { en: "Tracker Basics", es: "Básicos del localizador" },
+  喂养知识: { en: "Feeding Tips", es: "Consejos de alimentación" },
+  品种知识: { en: "Breed Knowledge", es: "Conocer las razas" },
+  寄养注意事项: { en: "Boarding Notes", es: "Notas de hospedaje" },
+  代溜安全: { en: "Walking Safety", es: "Seguridad en paseos" },
+  智能设备知识: { en: "Device Know-how", es: "Saber de dispositivos" },
+  // 任务状态 task status
+  今日推荐: { en: "Today's pick", es: "Recomendado hoy" },
+  可完成: { en: "Available", es: "Disponible" },
+  未来联动: { en: "Future linkage", es: "Vínculo futuro" }
+};
+
+/** 翻译单个枚举/术语词。未命中时回退原文。 */
+export function term(zh: string): LocalizedText {
+  const entry = TERMS[zh];
+  return { zh, en: entry?.en ?? zh, es: entry?.es ?? zh };
+}
+
+/** 翻译一组术语词（如 tags）。 */
+export function termList(values: string[]): LocalizedText[] {
+  return values.map(term);
+}
+
+/** 按当前语言直接得到术语词的字符串（display 用）。 */
+export function tt(zh: string, locale: Locale): string {
+  return pick(term(zh), locale);
+}
