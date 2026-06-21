@@ -1813,13 +1813,6 @@ td input {
   }
 }
 
-/* Public mobile responsive layer */
-@media (max-width: 980px) {
-  body.nav-open {
-    overflow: hidden;
-  }
-}
-
 @keyframes section-rise {
   from {
     opacity: 0;
@@ -4073,5 +4066,431 @@ button {
     min-height: 0;
     border-right: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.18);
+  }
+}
+
+/* Public mobile responsive layer — final overrides stay after page systems. */
+.site-shell:not(.admin-route),
+.site-shell:not(.admin-route) main,
+.site-shell:not(.admin-route) section,
+.site-shell:not(.admin-route) .container,
+.site-shell:not(.admin-route) [class*="grid"],
+.site-shell:not(.admin-route) [class*="copy"] {
+  min-width: 0;
+}
+
+.site-shell:not(.admin-route) img {
+  max-width: 100%;
+}
+
+@media (max-width: 980px) {
+  body.nav-open {
+    overflow: hidden;
+  }
+
+  .site-shell:not(.admin-route) .nav {
+    z-index: 60;
+  }
+
+  .site-shell:not(.admin-route) .nav-inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto auto;
+    gap: 10px;
+  }
+
+  .site-shell:not(.admin-route) .brand {
+    min-width: 0;
+  }
+
+  .site-shell:not(.admin-route) .nav-menu-button {
+    display: grid;
+    grid-column: 2;
+    margin-left: 0;
+  }
+
+  .site-shell:not(.admin-route) .nav-actions {
+    grid-column: 3;
+    margin-left: 0;
+  }
+
+  .site-shell:not(.admin-route) .nav-links {
+    position: absolute;
+    top: calc(100% + 1px);
+    left: 0;
+    right: 0;
+    display: grid;
+    grid-column: 1 / -1;
+    gap: 4px;
+    width: 100%;
+    max-height: 0;
+    overflow: hidden;
+    padding: 0;
+    border: 0 solid var(--line);
+    border-radius: 0 0 20px 20px;
+    background: white;
+    box-shadow: 0 18px 36px rgba(31, 77, 67, 0.12);
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(-8px);
+    transition: max-height 220ms ease, padding 220ms ease, opacity 180ms ease, transform 220ms ease, visibility 0s linear 220ms;
+  }
+
+  .site-shell:not(.admin-route) .nav-links.is-open {
+    max-height: min(70dvh, 560px);
+    overflow-y: auto;
+    padding: 12px;
+    border-width: 0 1px 1px;
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+    transition-delay: 0s;
+  }
+
+  .site-shell:not(.admin-route) .nav-link {
+    display: flex;
+    align-items: center;
+    min-height: 48px;
+    padding: 0.8rem 0.95rem;
+    border-radius: 10px;
+    font-size: 0.95rem;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-inner,
+  .site-shell:not(.admin-route) .catalog-hero-grid,
+  .site-shell:not(.admin-route) .product-detail-grid,
+  .site-shell:not(.admin-route) .tracker-product-grid,
+  .site-shell:not(.admin-route) .product-context-grid,
+  .site-shell:not(.admin-route) .tracker-story-grid,
+  .site-shell:not(.admin-route) .product-story,
+  .site-shell:not(.admin-route) .product-story.reverse,
+  .site-shell:not(.admin-route) .smart-home-panel,
+  .site-shell:not(.admin-route) .catalog-browser-head,
+  .site-shell:not(.admin-route) .tracker-spec-head,
+  .site-shell:not(.admin-route) .product-roadmap-grid,
+  .site-shell:not(.admin-route) .tracker-faq-grid,
+  .site-shell:not(.admin-route) .tracker-lead-inner,
+  .site-shell:not(.admin-route) .footer-newsletter,
+  .site-shell:not(.admin-route) .footer-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-shell:not(.admin-route) .page-hero-copy,
+  .site-shell:not(.admin-route) .catalog-hero-copy,
+  .site-shell:not(.admin-route) .product-story-copy,
+  .site-shell:not(.admin-route) .tracker-story-copy {
+    max-width: 720px;
+  }
+
+  .site-shell:not(.admin-route) .footer-grid {
+    gap: 42px;
+  }
+}
+
+@media (max-width: 640px) {
+  .site-shell:not(.admin-route) .container {
+    width: min(100% - 32px, 1320px);
+  }
+
+  .site-shell:not(.admin-route) :is(h1, h2, h3, p, a, button, input, textarea, select) {
+    overflow-wrap: anywhere;
+  }
+
+  .site-shell:not(.admin-route) :is(button, input, select, textarea, .pill, .ghost-pill, .nav-primary-link) {
+    min-height: 44px;
+  }
+
+  .site-shell:not(.admin-route) :is(input, select, textarea) {
+    font-size: 16px;
+  }
+
+  .site-shell:not(.admin-route) .fact-close {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .site-shell:not(.admin-route) .nav-inner {
+    min-height: 68px;
+    grid-template-columns: minmax(0, 1fr) 44px auto;
+  }
+
+  .site-shell:not(.admin-route) .nav-menu-button,
+  .site-shell:not(.admin-route) .locale-switch-button {
+    min-width: 44px;
+    min-height: 44px;
+  }
+
+  .site-shell:not(.admin-route) .page-hero,
+  .site-shell:not(.admin-route) .catalog-hero,
+  .site-shell:not(.admin-route) .product-detail-hero,
+  .site-shell:not(.admin-route) .tracker-product-hero {
+    padding-top: 40px;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-inner,
+  .site-shell:not(.admin-route) .catalog-hero-grid,
+  .site-shell:not(.admin-route) .product-detail-grid,
+  .site-shell:not(.admin-route) .tracker-product-grid,
+  .site-shell:not(.admin-route) .product-context-grid,
+  .site-shell:not(.admin-route) .tracker-story-grid {
+    gap: 36px;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-copy h1,
+  .site-shell:not(.admin-route) .catalog-hero-copy h1,
+  .site-shell:not(.admin-route) .product-detail-summary h1,
+  .site-shell:not(.admin-route) .tracker-product-copy h1 {
+    max-width: 100%;
+    font-size: clamp(2.35rem, 12vw, 3.4rem);
+    line-height: 0.98;
+    text-wrap: balance;
+  }
+
+  .site-shell:not(.admin-route) .home-hero {
+    min-height: max(700px, calc(100dvh - 104px));
+  }
+
+  .site-shell:not(.admin-route) .home-hero-inner {
+    min-height: inherit;
+    padding-top: clamp(170px, 34vh, 270px);
+    padding-bottom: 20px;
+  }
+
+  .site-shell:not(.admin-route) .home-hero h1 {
+    max-width: 8.5ch;
+    font-size: clamp(3rem, 15vw, 4.25rem);
+    line-height: 0.92;
+    text-wrap: balance;
+  }
+
+  .site-shell:not(.admin-route) .home-hero .lead {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-media img,
+  .site-shell:not(.admin-route) .catalog-hero-media,
+  .site-shell:not(.admin-route) .product-gallery-main,
+  .site-shell:not(.admin-route) .tracker-product-main-image,
+  .site-shell:not(.admin-route) .product-context-image,
+  .site-shell:not(.admin-route) .tracker-story-media {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-media img {
+    height: 100%;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-card,
+  .site-shell:not(.admin-route) .map-panel {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
+    width: auto;
+    max-width: calc(100% - 24px);
+    padding: 0.8rem 0.9rem;
+  }
+
+  .site-shell:not(.admin-route) .grid.cols-3,
+  .site-shell:not(.admin-route) .grid.cols-4,
+  .site-shell:not(.admin-route) .editorial-grid,
+  .site-shell:not(.admin-route) .collection-grid,
+  .site-shell:not(.admin-route) .service-pricing,
+  .site-shell:not(.admin-route) .partner-grid,
+  .site-shell:not(.admin-route) .partner-process,
+  .site-shell:not(.admin-route) .roadmap,
+  .site-shell:not(.admin-route) .faq-grid,
+  .site-shell:not(.admin-route) .metrics,
+  .site-shell:not(.admin-route) .ecosystem-chain,
+  .site-shell:not(.admin-route) .device-compare,
+  .site-shell:not(.admin-route) .advice-result-grid,
+  .site-shell:not(.admin-route) .form-grid,
+  .site-shell:not(.admin-route) .footer-service-strip {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-shell:not(.admin-route) .collection-card,
+  .site-shell:not(.admin-route) .collection-card:nth-child(n) {
+    grid-column: 1;
+    min-height: 360px;
+  }
+
+  .site-shell:not(.admin-route) .collection-card:nth-child(n) span {
+    padding-top: 240px;
+  }
+
+  .site-shell:not(.admin-route) .product-story {
+    min-height: 0;
+    gap: 34px;
+  }
+
+  .site-shell:not(.admin-route) .product-story + .product-story {
+    margin-top: 86px;
+  }
+
+  .site-shell:not(.admin-route) .product-story-media img {
+    height: auto;
+    aspect-ratio: 4 / 5;
+  }
+
+  .site-shell:not(.admin-route) .smart-home-section {
+    min-height: 0;
+    padding: 76px 0;
+  }
+
+  .site-shell:not(.admin-route) .chain-card {
+    min-height: 0;
+    padding: 1.35rem 0;
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.22);
+  }
+
+  .site-shell:not(.admin-route) :is(.segmented, .chip-row, .catalog-filter-tabs, .product-gallery-thumbs, .tracker-product-gallery-row) {
+    display: flex;
+    flex-wrap: nowrap;
+    width: 100%;
+    max-width: 100%;
+    overflow-x: auto;
+    overscroll-behavior-inline: contain;
+    scroll-snap-type: x proximity;
+    scrollbar-width: none;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .site-shell:not(.admin-route) :is(.segmented, .chip-row, .catalog-filter-tabs, .product-gallery-thumbs, .tracker-product-gallery-row)::-webkit-scrollbar {
+    display: none;
+  }
+
+  .site-shell:not(.admin-route) :is(.segmented, .chip-row, .catalog-filter-tabs) button,
+  .site-shell:not(.admin-route) :is(.product-gallery-thumbs, .tracker-product-gallery-row) > div {
+    flex: 0 0 auto;
+    min-height: 44px;
+    scroll-snap-align: start;
+  }
+
+  .site-shell:not(.admin-route) .segmented {
+    border-radius: 18px;
+  }
+
+  .site-shell:not(.admin-route) .filter-row,
+  .site-shell:not(.admin-route) .newsletter-form {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-shell:not(.admin-route) .search-field,
+  .site-shell:not(.admin-route) .search-field input {
+    width: 100%;
+  }
+
+  .site-shell:not(.admin-route) .catalog-filter-panel {
+    margin-inline: 0;
+    padding: 20px 16px;
+    border: 1px solid var(--line);
+    border-radius: 18px;
+  }
+
+  .site-shell:not(.admin-route) .catalog-product-grid {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 46px;
+  }
+
+  .site-shell:not(.admin-route) .catalog-product-media,
+  .site-shell:not(.admin-route) .catalog-product-media img {
+    min-height: 0;
+    height: auto;
+    aspect-ratio: 4 / 3;
+  }
+
+  .site-shell:not(.admin-route) .catalog-consultation {
+    grid-template-columns: minmax(0, 1fr);
+    gap: 28px;
+    padding: 32px 24px;
+    border-radius: 24px;
+  }
+
+  .site-shell:not(.admin-route) .product-gallery-thumbs,
+  .site-shell:not(.admin-route) .tracker-product-gallery-row {
+    gap: 10px;
+    padding-bottom: 4px;
+  }
+
+  .site-shell:not(.admin-route) .product-gallery-thumbs > div,
+  .site-shell:not(.admin-route) .tracker-product-gallery-row > div {
+    flex-basis: 128px;
+    min-height: 96px;
+  }
+
+  .site-shell:not(.admin-route) .product-detail-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .site-shell:not(.admin-route) .product-detail-actions :is(.pill, .ghost-pill) {
+    width: 100%;
+  }
+
+  .site-shell:not(.admin-route) .product-detail-trust,
+  .site-shell:not(.admin-route) .tracker-live-badges {
+    flex-wrap: wrap;
+  }
+
+  .site-shell:not(.admin-route) .product-capability-list,
+  .site-shell:not(.admin-route) .tracker-capability-list,
+  .site-shell:not(.admin-route) .tracker-spec-row,
+  .site-shell:not(.admin-route) .tracker-scenes-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .site-shell:not(.admin-route) .product-capability-list article,
+  .site-shell:not(.admin-route) .tracker-capability-list article {
+    grid-template-columns: 36px minmax(0, 1fr);
+    gap: 12px;
+  }
+
+  .site-shell:not(.admin-route) .product-capability-list p,
+  .site-shell:not(.admin-route) .tracker-capability-list p {
+    grid-column: 2;
+  }
+
+  .site-shell:not(.admin-route) .footer {
+    padding-bottom: calc(36px + env(safe-area-inset-bottom));
+  }
+
+  .site-shell:not(.admin-route) .footer-service,
+  .site-shell:not(.admin-route) .footer-service:last-child {
+    border-right: 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.16);
+  }
+}
+
+@media (max-width: 430px) {
+  .site-shell:not(.admin-route) .container {
+    width: min(100% - 24px, 1320px);
+  }
+
+  .site-shell:not(.admin-route) .brand-text {
+    font-size: 1rem;
+  }
+
+  .site-shell:not(.admin-route) .home-hero .hero-actions,
+  .site-shell:not(.admin-route) .hero-actions,
+  .site-shell:not(.admin-route) .button-row,
+  .site-shell:not(.admin-route) .buy-actions,
+  .site-shell:not(.admin-route) .product-detail-actions {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    width: 100%;
+  }
+
+  .site-shell:not(.admin-route) :is(.hero-actions, .button-row, .buy-actions, .product-detail-actions) :is(.pill, .ghost-pill) {
+    width: 100%;
+  }
+
+  .site-shell:not(.admin-route) .page-hero-card,
+  .site-shell:not(.admin-route) .map-panel {
+    padding: 0.7rem 0.75rem;
   }
 }

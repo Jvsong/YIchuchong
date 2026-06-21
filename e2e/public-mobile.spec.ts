@@ -47,3 +47,50 @@ for (const route of routes) {
     expect(dimensions.content).toBeLessThanOrEqual(dimensions.viewport + 1);
   });
 }
+
+test("public controls provide phone-sized touch targets", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) > 640, "Phone-only touch target contract");
+  await page.goto("/wiki");
+  const undersized = await page.locator("button, input, select, textarea").evaluateAll((elements) =>
+    elements
+      .filter((element) => {
+        const rect = element.getBoundingClientRect();
+        return rect.width > 0 && rect.height > 0 && rect.height < 44;
+      })
+      .map((element) => ({
+        label: element.getAttribute("aria-label") ?? element.textContent?.trim() ?? element.tagName,
+        height: Math.round(element.getBoundingClientRect().height),
+      })),
+  );
+
+  expect(undersized).toEqual([]);
+});
+
+test("mobile filters scroll without compressing their labels", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) > 640, "Phone-only filter behavior");
+  await page.goto("/wiki");
+
+  for (const selector of [".segmented", ".chip-row"]) {
+    const filter = page.locator(selector);
+    await expect(filter).toBeVisible();
+    await expect(filter).toHaveCSS("overflow-x", "auto");
+    const shrinkValues = await filter.locator("button").evaluateAll((buttons) =>
+      buttons.map((button) => getComputedStyle(button).flexShrink),
+    );
+    expect(shrinkValues.every((value) => value === "0")).toBe(true);
+  }
+});
+
+test("product detail actions become full-width on narrow phones", async ({ page }) => {
+  test.skip((page.viewportSize()?.width ?? 0) > 640, "Phone-only action layout");
+  await page.goto("/devices/auto-feeder");
+  const actionRow = page.locator(".product-detail-actions");
+  const primaryAction = actionRow.locator(".pill");
+
+  const widths = await Promise.all([
+    actionRow.evaluate((element) => element.getBoundingClientRect().width),
+    primaryAction.evaluate((element) => element.getBoundingClientRect().width),
+  ]);
+
+  expect(widths[1]).toBeGreaterThanOrEqual(widths[0] - 2);
+});
