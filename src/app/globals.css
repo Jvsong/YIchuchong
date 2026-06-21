@@ -1813,6 +1813,13 @@ td input {
   }
 }
 
+/* Public mobile responsive layer */
+@media (max-width: 980px) {
+  body.nav-open {
+    overflow: hidden;
+  }
+}
+
 @keyframes section-rise {
   from {
     opacity: 0;
